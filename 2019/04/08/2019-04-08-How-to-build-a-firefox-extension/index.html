@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title></title>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
+    <script type="text/javascript" src="/js/musicbar.js"></script>
+    <script>
+      window.onload = function() {
+        const mb = new MusicBar({ 
+          url:'http://sc1.111ttt.cn:8282/2016/1/12m/03/205031245491.m4a?tflag=1546606800&pin=97bb2268ae26c20fe093fd5b0f04be80#.mp3',
+          thumb: "https://y.gtimg.cn/music/photo_new/T002R300x300M0000007oL0R1hDyxV.jpg?max_age=2592000"
+        });
+        mb.createVideo();
+      }
+    </script>
+</head>
+
+<body>
+    <nav>
+    <div class="nav-item logo">
+    <img src="/imgs/logo.png" class="logo_img"/>
+    <a href="/">君の名は。</a>
+    </div>
+    
+     <div class="nav-item"><a href="/">Home</a></div>
+    
+     <div class="nav-item"><a href="/archives">Archiver</a></div>
+    
+     <div class="nav-item"><a href="/about">About</a></div>
+    
+</nav>
+    <main>
+        
+<div class="post">
+<article>
+  
+    
+    <h3 class="article-title"><span>How to build a firefox extension</span></h3>
+    
+  
+  <div class="article-top-meta">
+    <span class="posted-on">
+      <a href="/2019/04/08/2019-04-08-How-to-build-a-firefox-extension/" rel="bookmark">
+        <time class="entry-date published" datetime="2019-04-08T00:08:08.000Z">
+          2019-04-08
+        </time>
+      </a>
+    </span>
+  </div>
+   
+
+  <div class="article-content">
+    <div class="entry">
+      
+        <h3 id="before-we-start-we-can-introduce-a-development-tool-firstly"><a href="#before-we-start-we-can-introduce-a-development-tool-firstly" class="headerlink" title="before we start, we can introduce a development tool firstly"></a>before we start, we can introduce a development tool firstly</h3><p><code>web-ext</code> which is a command line tool designed to speed up various parts of the extension development process, making development faster and easier.<br>you can install it to global environment.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install --global web-ext</span><br></pre></td></tr></table></figure></p>
+<p>Now, we create a folder name “firebox-extension-demo”, and create a <code>manifest.json</code>  file. we can build a firefox extension start from a <code>manifest.json</code>, the file is the enterance of a extension. The <code>manifest.json</code> should include the <code>name</code>, <code>version</code>, <code>manifest_version</code> at least.<a id="more"></a><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&quot;name&quot;: &quot;996.ICU&quot;,</span><br><span class="line">&quot;version&quot;: &quot;1.0&quot;,</span><br><span class="line">&quot;manifest_version&quot;: &quot;1.0&quot;,</span><br><span class="line">&quot;description&quot;: &quot;firefox version of 996.ICU&quot;,</span><br><span class="line">&quot;icons&quot;: &#123;</span><br><span class="line">    &quot;48&quot;: &quot;/icons/icon_48.png&quot;,</span><br><span class="line">    &quot;96&quot;: &quot;/icons/icon_96.png&quot;</span><br><span class="line">&#125;,</span><br><span class="line">&quot;content_scripts&quot;: [&#123;</span><br><span class="line">  &quot;matches&quot;: [],</span><br><span class="line">  &quot;js&quot;: [&quot;content.js&quot;]</span><br><span class="line">&#125;],</span><br><span class="line">&quot;background&quot;: &#123;</span><br><span class="line">  &quot;scripts&quot;: [&quot;background.js&quot;],</span><br><span class="line">  &quot;page&quot;: [&quot;background-page.htmml&quot;]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>  “icons” will add a icon a firefox’s extension page, “content_scripts” ‘s value will be loaded to the “matches” URLs.</p>
+<p>Here is an image to descripe how a extension be structed;<br><img src="/integration-blog/assets/2019-04-08-How-to-build-a-firefox-extension/webextension-anatomy.svg" alt="firefox extension"></p>
+<h3 id="what’s-content-script"><a href="#what’s-content-script" class="headerlink" title="what’s content script?"></a>what’s content script?</h3><p> A content script is a part of your extension that runs in the context of a particular web page. Content scripts can access and modify the page’s DOM, just like normal page scripts can. Content scripts can only access a small subset of the WebExtension APIs. And the background script can access the full WebExtension APIs.</p>
+<p>then we go to the root folder of firefox extension, use command<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">web-ext run</span><br></pre></td></tr></table></figure></p>
+<p>This starts Firefox and loads the extension temporarily in the browser, and will auto reload when your source files are edited.</p>
+<p>and we build a <code>content.js</code> file<br> <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure></p>
+<p> Those are subset of WebExtensions API which content script can access to: extenstion.getURl,extension.inIncognitoContext, runtime APIs, includes connect(), getManifest(), getUrl(), onConnect(), onMessage() and sendMessage(), all storage APIs.</p>
+<h3 id="what’s-background-page"><a href="#what’s-background-page" class="headerlink" title="what’s background page?"></a>what’s background page?</h3><p>Sometimes, extensions often need to maintain long-term state or perform long-term operations independently of the lifetime of any particular web page or browser window. That is what background scripts are for.<br>You can descript a background script or you can descript a background page then load the background script. This can support the ES6 module.<br>Background page can access to <code>window</code> glogal varible, full DOM API and full WebExtensions API.</p>
+<h3 id="what’s-extensiton-page-standlong"><a href="#what’s-extensiton-page-standlong" class="headerlink" title="what’s extensiton page(standlong)?"></a>what’s extensiton page(standlong)?</h3><p>The Firefox support three kinds of page to build a extension. they are slides, popup window and options page. And the support a special page to build your app.<br>you can use <code>window.create()</code> or <code>tab.create()</code> to create a standlong page.<br>This page can include html, css and javascript. it can access all full WebExtensions API too. But it has it’s own global.</p>
+<p>demo to create a extension page<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">const createData = &#123;</span><br><span class="line">  type: &apos;detached_panel&apos;, // &quot;normal&quot;, &quot;popup&quot;, &quot;panel&quot;, &quot;detached_panel&quot;</span><br><span class="line">  url: &apos;standlong.html&apos;,</span><br><span class="line">  width: 345,</span><br><span class="line">  heigt: 500,</span><br><span class="line">&#125;</span><br><span class="line">browser.window.create(createData)</span><br></pre></td></tr></table></figure></p>
+<h3 id="How-content-script-communicate-with-background-script"><a href="#How-content-script-communicate-with-background-script" class="headerlink" title="How content script communicate with background script?"></a>How content script communicate with background script?</h3><ol>
+<li>one-off message.<br>content =&gt; background<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">browser.runtime.sendMessage(extensionId, message, options);</span><br><span class="line">browser.runtime.onMessage.addListener(function(message, sender, sendRespone) &#123;&#125;);</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>background =&gt; content<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">browser.tabs.sendMessage(tabId, message, options);</span><br><span class="line">browser.runtime.onMessage.addListener(function(message, sender, sendRespone) &#123;&#125;);</span><br></pre></td></tr></table></figure></p>
+<ol start="2">
+<li>connection-based messaging.<br>This is kind of longer-lived connection between the two contexts</li>
+</ol>
+<p>content =&gt; background<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">// content</span><br><span class="line">browser.runtime.connect(&#123;&#125;);</span><br><span class="line">// background</span><br><span class="line">browser.runtime.onConnect.addListener(function(portFromCS) &#123;</span><br><span class="line">  portFromCS.onMessage.Listener(funciton(message)&#123;</span><br><span class="line">    console.log(&apos;message from content&apos;, message);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure></p>
+<h3 id="How-content-script-communicate-with-page-script"><a href="#How-content-script-communicate-with-page-script" class="headerlink" title="How content script communicate with page script?"></a>How content script communicate with page script?</h3><p>content script can’t access to page’s script directly, but it can use DOM window.postMessage() API and window.addEventListener API to access page’s script indirectly.<br> pagg =&gt; content<br> <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"> // page</span><br><span class="line"> window.postMessage(message, targetOrigin);</span><br><span class="line">// content</span><br><span class="line">window.addEventListener(&apos;message&apos;, function(event) &#123;</span><br><span class="line">  console.log(&apos;message from page script&apos;, event.data);</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure></p>
+<p> content to page is the same.</p>
+
+      
+    </div>
+  </div>
+  <div class="article-footer"> 
+    <div class="pull-left">
+      
+      
+      <span class="post-categories">
+        <i class="icon-categories"></i>
+        <a href="javascript:void(0)">blog</a>
+      </span>
+      
+
+  
+    </div>
+    <div class="pull-right">
+      <i class="icon-comments"> </i>
+    </div>
+  </div> 
+</article>
+</div>
+    </main>
+    <div class="footer">
+<div class="copy">
+&copy; 2019 Burgerking |
+Theme created by <a href="https://github.com/JackZong" target="_blank">@J.zong</a> 
+</div>
+  <div class="hexo">
+    Powerd by <a href="http://hexo.io/" target="_blank">Hexo</a>
+  </div>       
+</div>
+</body>
+</html>
+</body>
+</html>

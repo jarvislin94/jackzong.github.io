@@ -390,3 +390,47 @@ nav.pagination .active {
   font-size: 20px;
   filter: grayscale(200%);
 }
+.paused .left {
+  width: 50%;
+}
+.paused .right {
+  width: 50%;
+}
+.paused .trangle-1 {
+  transform: translate(0, -50%);
+}
+.paused .trangle-2 {
+  transform: translate(0, 50%);
+}
+@-moz-keyframes rotate360 {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@-webkit-keyframes rotate360 {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@-o-keyframes rotate360 {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes rotate360 {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

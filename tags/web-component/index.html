@@ -4,6 +4,16 @@
     <title></title>
     <meta charset="utf-8">
     <link rel="stylesheet" href="/css/style.css" type="text/css">
+    <script type="text/javascript" src="/js/musicbar.js"></script>
+    <script>
+      window.onload = function() {
+        const mb = new MusicBar({ 
+          url:'http://sc1.111ttt.cn:8282/2016/1/12m/03/205031245491.m4a?tflag=1546606800&pin=97bb2268ae26c20fe093fd5b0f04be80#.mp3',
+          thumb: "https://y.gtimg.cn/music/photo_new/T002R300x300M0000007oL0R1hDyxV.jpg?max_age=2592000"
+        });
+        mb.createVideo();
+      }
+    </script>
 </head>
 
 <body>
