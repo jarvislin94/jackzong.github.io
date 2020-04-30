@@ -11,25 +11,27 @@ class MusicBar {
   }   
  
   barStyle = `
-    width: 45px; 
-    height: 45px; 
+    width: 65px; 
+    height: 65px; 
     border-radius: 50%; 
-    border: solid 1px black;
     position: absolute;
     cursor: move;
     bottom: 88px;
     left: 50px;
   `;
 
-  imgStyle = `width: 100%;height: 100%; border-radius: 50%; animation: rotate360 11s infinite linear;`;
+  imgStyle = `width: 100%;height: 100%; background: #c0392b; border-radius: 50%`;
   
   spanStyle = `
     height: 30px;
     width: 30px;
     display: block;
-    margin: 0 auto;
+    margin: 60 auto;
     overflow: hidden;
-    position: relative;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
   `;
 
   leftStyle = `
@@ -44,6 +46,10 @@ class MusicBar {
     transform: translate(0, -100%);
   `;
 
+  trangle2Style = `
+  transform: translate(0, 100%);
+`;
+
    trangleStyle = `
      position: absolute;
      top: 0;
@@ -51,14 +57,10 @@ class MusicBar {
      background-color: transparent;
      width: 0;
      height: 0;
-     border-right: 20px solid #c0392b;
-     border-top: 10px solid transparent;
-     border-bottom: 10px solid transparent;
+     border-right: 30px solid #c0392b;
+     border-top: 15px solid transparent;
+     border-bottom: 15px solid transparent;
      transition: transform 0.25s ease;
-   `;
-
-   trangle2Style = `
-     transform: translate(0, 100%);
    `;
 
    rightStyle = `
@@ -68,7 +70,20 @@ class MusicBar {
      background-color: #fff;
      transition: all 0.25s ease;
    `;
-
+   
+   pausedLeftStyle = `
+     width: 50;
+   `;
+   pausedRightStyle = `
+     width: 50%;
+   `;
+   pausedTriangle1Style = `
+     transform: translate(0, -50%);
+   `;
+   pausedTriangle2Style = `
+     transform: translate(0, 50%)
+    `;
+    
   createVideo() {
     const audio = document.createElement('audio');
     audio.src = this.url;
@@ -77,8 +92,7 @@ class MusicBar {
     const div = document.createElement('div');
     div.id = "musicbar";
     div.style = this.barStyle;
-    const img = document.createElement('img');
-    img.src = this.thumb;
+    const img = document.createElement('div');
     img.style = this.imgStyle;
     img.draggable = false;
     const control = document.createElement('a');
