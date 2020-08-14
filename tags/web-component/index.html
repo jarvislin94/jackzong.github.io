@@ -1,60 +1,91 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title></title>
+    <title>『君の名は。』</title>
     <meta charset="utf-8">
     <link rel="stylesheet" href="/css/style.css" type="text/css">
-    <script type="text/javascript" src="/js/musicbar.js"></script>
-    <script>
-      // window.onload = function() {
-      //   const mb = new MusicBar({ 
-      //     url:'http://sc1.111ttt.cn:8282/2016/1/12m/03/205031245491.m4a?tflag=1546606800&pin=97bb2268ae26c20fe093fd5b0f04be80#.mp3',
-      //     thumb: "https://y.gtimg.cn/music/photo_new/T002R300x300M0000007oL0R1hDyxV.jpg?max_age=2592000"
-      //   });
-      //   mb.createVideo();
-      // }
-    </script>
+   <!--  <script type="text/javascript" src="/js/musicbar.js"></script>
+        <script>
+      window.onload = function() {
+        const mb = new MusicBar({ 
+          url:'/music/daydaymissyou.mp3',
+          thumb: "https://y.gtimg.cn/music/photo_new/T002R300x300M0000007oL0R1hDyxV.jpg?max_age=2592000"
+        });
+        mb.createVideo();
+      }
+    </script> -->
 </head>
 
 <body>
     <nav>
     <div class="nav-item logo">
-    <img src="/imgs/logo.png" class="logo_img"/>
-    <a href="/">君の名は。</a>
+      <a href="/">『君の名は。』</a>
     </div>
     
-     <div class="nav-item"><a href="/">Home</a></div>
+     <div class="nav-item"><a href="/">ホームページ</a></div>
     
-     <div class="nav-item"><a href="/archives">Archiver</a></div>
+     <div class="nav-item"><a href="/archives">アーカイブ</a></div>
     
-     <div class="nav-item"><a href="/about">About</a></div>
-    
-     <div class="nav-item"><a href="/categories">Categoties</a></div>
+     <div class="nav-item"><a href="/about">オン</a></div>
     
 </nav>
     <main>
-        <h2 class="about-title">web component</h2>
+        <div class="wrapper">
+<h2 class="tag-title">#web component#に関する記事</h2>
+<div class="tag-box">
 
-<ul class="category-list">
+
+<ul class="tag-list">
  
   
   <li>
-    <p>#  2018-12-28</p>
-    <a href="/2018/12/28/2018-12-28-Reading-Web-Component-And-Custom-Elements/" > Reading: Make a Native Web Component with Custom Elements v1 and Shadow DOM v1 </a>
+    <a href="/2018/12/28/2018-12-28-Reading-Web-Component-And-Custom-Elements/" title="Reading: Make a Native Web Component with Custom Elements v1 and Shadow DOM v1">
+     <span class="tag-post-title"># Reading: Make a Native Web Component with Custom Elements v1 and Shadow DOM v1 </span>
+     <span class="tag-post-time">18年12月28日</span>   
+     </a>
   </li>
 
 </ul>
 
+</div>
+
+</div>
     </main>
     <div class="footer">
 <div class="copy">
-&copy; 2020 Burgerking |
-Theme created by <a href="https://github.com/JackZong" target="_blank">@J.zong</a> 
+&copy; 2020 君の名は。|
+によって作成されたテーマ<a href="https://github.com/JackZong" target="_blank" title="Theme created by @J.zong">@J.zong</a> 
 </div>
-  <div class="hexo">
-    Powerd by <a href="http://hexo.io/" target="_blank">Hexo</a>
+<br>
+  <div class="hexo" title="Powered by Hexo">
+   搭載 <a href="http://hexo.io/" target="_blank">Hexo</a> | <a href="javascript:void(0);" id="bgToggle"> 背景画像 </a>
   </div>       
 </div>
+
+<script> 
+window.onload = function() {
+  const withBg = localStorage.getItem('withBg');
+  if(withBg === 'true') {
+    document.body.classList.add('with-bg');
+    document.getElementById('bgToggle').classList.add('active');
+  }
+  
+  document.getElementById('bgToggle').addEventListener('click', function(e) {
+    e.preventDefault();
+    const withBg = localStorage.getItem('withBg');
+    if(withBg === 'true') {
+        localStorage.setItem('withBg', 'false');
+        document.body.classList.remove('with-bg');
+         document.getElementById('bgToggle').classList.remove('active');
+      } else {
+        localStorage.setItem('withBg', 'true');
+        document.body.classList.add('with-bg');
+        document.getElementById('bgToggle').classList.add('active');
+      }
+  })
+}
+
+</script>
 </body>
 </html>
 </body>
