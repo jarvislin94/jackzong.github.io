@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>『君の名は。』</title>
+  <link rel="icon" href="/imgs/favicon.ico">
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  <link rel="stylesheet" href="/plugins/highlight/styles/atom-one-dark.css">
+  <!--  <script type="text/javascript" src="/js/musicbar.js"></script>
+      <script>
+    window.onload = function() {
+      const mb = new MusicBar({ 
+        url:'/music/daydaymissyou.mp3',
+        thumb: "https://y.gtimg.cn/music/photo_new/T002R300x300M0000007oL0R1hDyxV.jpg?max_age=2592000"
+      });
+      mb.createVideo();
+    }
+  </script> -->
+</head>
+
+<body>
+    <nav>
+    <div class="nav-item logo">
+      <a href="/">『君の名は。』</a>
+    </div>
+    
+     <div class="nav-item"><a href="/">ホームページ</a></div>
+    
+     <div class="nav-item"><a href="/archives">アーカイブ</a></div>
+    
+     <div class="nav-item"><a href="/about">オン</a></div>
+    
+</nav>
+    <main>
+        <div class="wrapper">
+<h2 class="tag-title">#Foo#に関する記事</h2>
+<div class="tag-box">
+
+
+<ul class="tag-list">
+ 
+  
+  <li>
+    <a href="/2018/07/24/markdown/" title="Markdown Style test">
+     <span class="tag-post-title"># Markdown Style test </span>
+     <span class="tag-post-time">18年07月24日</span>   
+     </a>
+  </li>
+
+  
+  <li>
+    <a href="/2013/12/24/tags/" title="Tags">
+     <span class="tag-post-title"># Tags </span>
+     <span class="tag-post-time">13年12月24日</span>   
+     </a>
+  </li>
+
+</ul>
+
+</div>
+
+</div>
+    </main>
+    <div class="footer">
+<div class="copy">
+&copy; 2020 君の名は。|
+によって作成されたテーマ<a href="https://github.com/JackZong" target="_blank" title="Theme created by @J.zong">@J.zong</a> 
+</div>
+<br>
+  <div class="hexo" title="Powered by Hexo">
+   搭載 <a href="http://hexo.io/" target="_blank">Hexo</a> | <a href="javascript:void(0);" id="bgToggle"> 背景画像 </a>
+  </div>       
+</div>
+
+<script> 
+window.onload = function() {
+  const withBg = localStorage.getItem('withBg');
+  if(withBg === 'true') {
+    document.body.classList.add('with-bg');
+    document.getElementById('bgToggle').classList.add('active');
+  }
+  
+  document.getElementById('bgToggle').addEventListener('click', function(e) {
+    e.preventDefault();
+    const withBg = localStorage.getItem('withBg');
+    if(withBg === 'true') {
+        localStorage.setItem('withBg', 'false');
+        document.body.classList.remove('with-bg');
+         document.getElementById('bgToggle').classList.remove('active');
+      } else {
+        localStorage.setItem('withBg', 'true');
+        document.body.classList.add('with-bg');
+        document.getElementById('bgToggle').classList.add('active');
+      }
+  })
+}
+</script>
+<script src="/plugins/highlight/highlight.pack.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+</body>
+</html>
+</body>
+</html>
