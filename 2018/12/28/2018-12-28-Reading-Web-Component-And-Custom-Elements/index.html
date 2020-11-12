@@ -17,8 +17,21 @@
       mb.createVideo();
     }
   </script> -->
-</head>
 
+  <!-- show love temp -->
+  <script type="text/javascript">
+    setTimeout(() => {
+      const isSorry = JSON.parse(localStorage.getItem('isSorry'));
+      console.log('isSorry:', isSorry);
+      if (isSorry) {
+        const letterContent = document.getElementById('letter-content');
+        letterContent.style.display = 'none';
+        const alwaysHappy = document.getElementById('always-happy');
+        alwaysHappy.classList.add('show');
+      }
+    }, 0)
+  </script>
+</head>
 <body>
     <nav>
     <div class="nav-item logo">
