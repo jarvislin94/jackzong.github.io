@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>
+    君の名は
+  </title>
+  <link rel="icon" href="/imgs/favicon.ico">
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  <link rel="stylesheet" href="/plugins/highlight/styles/atom-one-dark.css">
+  <!-- Gitalk -->
+  
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+    <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+    <script>
+      window.addEventListener('load', () => {
+        const gitalkContainer = document.getElementById('gitalk-container');
+        if (!gitalkContainer) return;
+        const gitalk = new Gitalk({
+          clientID: 'c9f73c62f3102ab718ca',
+          clientSecret: 'baaae04e80a7772584de07c3c343d48a7d2670da',
+          repo: 'jackzong.github.io',      // The repository of store comments '
+          owner: 'JackZong',
+          admin: ['JackZong'],
+          id: location.pathname,      // Ensure uniqueness and length less than 50
+          distractionFreeMode: false  // Facebook-like distraction free mode
+        })
+        gitalk.render('gitalk-container');
+      })
+    </script>
+    
+<meta name="generator" content="Hexo 6.3.0"></head>
+<body>
+    <nav>
+  <div class="nav-item logo">
+    <a href="/">
+      <button class="btn btn-hover">
+        <span>
+          君の名は
+        </span>
+      </button>
+    </a>
+  </div>
+  
+    <div class="nav-item"><a href="/">
+        主页
+      </a></div>
+    
+    <div class="nav-item"><a href="/archives">
+        时间轴
+      </a></div>
+    
+    <div class="nav-item"><a href="/tags">
+        标签
+      </a></div>
+    
+    <div class="nav-item"><a href="/about">
+        关于
+      </a></div>
+    
+</nav>
+    <main>
+        <div class="post">
+    <article class="card post-article">
+  
+              
+                  <h3 class="article-title-detail"><span>
+                      怎么实现微信扫码登录
+                    </span></h3>
+                  <div class="posted-on-detail">『23年04月25日』</div>
+                  
+                    
+                      <div class="article-top-meta">
+                        
+                      </div>
+                      
+
+                          <div class="article-content">
+                            <div class="entry">
+                              
+                                    <p>最近在给企业健康管理系统做一个微信扫码登录的功能，借此机会总结下微信登录这个技术点。</p>
+<p>网站应用微信登录是基于 <a target="_blank" rel="noopener" href="https://oauth.net/2/">OAuth2.0</a> 协议标准构建的。OAuth 协议规范了五种授权模式，Authorization Code、PKCE、Client CreDentials、Device Code 和 Refresh Token。微信目前只支持 authorization_code 模式。</p>
+<span id="more"></span>
+
+<h4 id="微信网站应用接入基础知识"><a href="#微信网站应用接入基础知识" class="headerlink" title="微信网站应用接入基础知识"></a>微信网站应用接入基础知识</h4><p>第一步需要先到<code>微信开放平台</code>注册一个开发者账号，并创建一个微信登录网站应用，然后获得<code>AppID</code> 和 <code>AppSecret</code>。</p>
+<p>微信的<code>authorization_code</code>模式：</p>
+<ol>
+<li>发起微信授权登录请求</li>
+</ol>
+<pre><code class='http'>
+// 请求格式
+https://open.weixin.qq.com/connect/oauth2/authorize
+?appid=xxx
+&redirect_uri=xx-server-api
+&response_type=code
+&scope=snsapi_userinfo
+&state=xxx
+&connect_redirect=1#wechat_redirect
+
+</code></pre>
+
+<ol start="2">
+<li>用户扫码授权之后，微信会重定向到回调地址并且给予一个临时票据<code>code</code>;</li>
+<li>后端拿<code>code</code> 、<code>AppID</code>和<code>AppSecret</code>通过 API 换取<code>access_token</code>;</li>
+<li>通过<code>access_token</code>进行接口调用，换取用户基本信息</li>
+<li>根据用户信息中的 openId 查询是否已经和系统用户绑定</li>
+</ol>
+<p>流程图：</p>
+<p><img src="https://res.wx.qq.com/op_res/D0wkkHSbtC6VUSHX4WsjP5ssg5mdnEmXO8NGVGF34dxS9N1WCcq6wvquR4K_Hcut" alt="微信官方"></p>
+<p><strong>关于 state 参数：</strong></p>
+<p><code>state</code>参数： state 参数会在用户授权成功后和<code>code</code>一起携带给 redirect URL。主要用来做 CSRF 防范。</p>
+<pre><code class='javascript'>
+redirect_url?code=CODE&state=STATE
+</code></pre>
+
+<p><strong>关于 code:</strong><br>Code 的超时时间为 10 分钟，一个 code 只能成功换取一个 access_token 即失效。</p>
+<h4 id="关于展示形式"><a href="#关于展示形式" class="headerlink" title="关于展示形式"></a>关于展示形式</h4><p>微信登录有两种展示形式，一种是<code>弹窗打开登录二维码</code>,另一种是<code>将二维码嵌套在自己网页内</code>。</p>
+<h4 id="我们的设计"><a href="#我们的设计" class="headerlink" title="我们的设计"></a>我们的设计</h4><p>交互流程<br><img src="/2023/04/25/wechat-login/login_flow.png" alt="交互流程"></p>
+<p>前端工作流程：</p>
+<p>1、二维码展示，请求&#x2F;wechat&#x2F;qrcode 地址获取二维码地址，返回的参数有 state 字段（重要）。</p>
+<p><em>Note:后端生成一个 uuid state，并存储在 Redis 中用来检测用户的扫码状态</em></p>
+<p>2、在当前二维码页面轮询&#x2F;wechat&#x2F;qrcode&#x2F;status&#x2F;{state} 接口，判断是否已授权、未绑定、已绑定三种状态。</p>
+<pre><code>1）未授权，继续轮询
+
+2）已授权已绑定，根据/wechat/qrcode/status/&#123;state&#125; 接口返回的租户、登录凭证，调用登录接口/login/wechat。
+
+3）已授权未绑定，进去用户绑定微信流程
+
+&gt; 用户绑定微信流程
+请求/wechat/bind/sms/send 接口，发送用户绑定微信的验证码
+请求/wechat/bind 接口，绑定用户。
+根据/wechat/bind 接口返回的租户、凭证信息，调用登录接口/login/wechat。
+</code></pre>
+<h4 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h4><p><a target="_blank" rel="noopener" href="https://developers.weixin.qq.com/doc/oplatform/Website_App/WeChat_Login/Wechat_Login.html">网站应用微信登录开发指南</a></p>
+
+                                      
+                            </div>
+                          </div>
+                          <div class="article-footer">
+
+                          </div>
+</article>
+        
+            <div id="gitalk-container" class="card"></div>
+            
+</div>
+    </main>
+    <div class="footer">
+  <div class="copy">
+    &copy;
+      2023 君の名は。|
+        によって作成されたテーマ<a href="https://github.com/JackZong" target="_blank" title="Theme created by @J.zong">@J.zong</a>
+  </div>
+  <div class="hexo">
+    <span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+  </div>
+  <div class="hexo" title="Powered by Hexo">
+    搭載 <a href="http://hexo.io/" target="_blank">Hexo</a> | <a href="javascript:void(0);" id="bgToggle"> 背景画像 </a>
+  </div>
+</div>
+
+<script>
+  window.onload = function () {
+    const withBg = localStorage.getItem('withBg');
+    if (withBg === 'true') {
+      document.body.classList.add('with-bg');
+      document.getElementById('bgToggle').classList.add('active');
+    }
+
+    document.getElementById('bgToggle').addEventListener('click', function (e) {
+      e.preventDefault();
+      const withBg = localStorage.getItem('withBg');
+      if (withBg === 'true') {
+        localStorage.setItem('withBg', 'false');
+        document.body.classList.remove('with-bg');
+        document.getElementById('bgToggle').classList.remove('active');
+      } else {
+        localStorage.setItem('withBg', 'true');
+        document.body.classList.add('with-bg');
+        document.getElementById('bgToggle').classList.add('active');
+      }
+    })
+  }
+</script>
+
+
+  <script src="/plugins/highlight/highlight.pack.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  
+
+    
+      <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+      
+        </body>
+
+        </html>
+</body>
+</html>

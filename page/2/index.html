@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>
+    君の名は
+  </title>
+  <link rel="icon" href="/imgs/favicon.ico">
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  <link rel="stylesheet" href="/plugins/highlight/styles/atom-one-dark.css">
+  <!-- Gitalk -->
+  
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+    <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+    <script>
+      window.addEventListener('load', () => {
+        const gitalkContainer = document.getElementById('gitalk-container');
+        if (!gitalkContainer) return;
+        const gitalk = new Gitalk({
+          clientID: 'c9f73c62f3102ab718ca',
+          clientSecret: 'baaae04e80a7772584de07c3c343d48a7d2670da',
+          repo: 'jackzong.github.io',      // The repository of store comments '
+          owner: 'JackZong',
+          admin: ['JackZong'],
+          id: location.pathname,      // Ensure uniqueness and length less than 50
+          distractionFreeMode: false  // Facebook-like distraction free mode
+        })
+        gitalk.render('gitalk-container');
+      })
+    </script>
+    
+<meta name="generator" content="Hexo 6.3.0"></head>
+<body>
+    <nav>
+  <div class="nav-item logo">
+    <a href="/">
+      <button class="btn btn-hover">
+        <span>
+          君の名は
+        </span>
+      </button>
+    </a>
+  </div>
+  
+    <div class="nav-item"><a href="/">
+        主页
+      </a></div>
+    
+    <div class="nav-item"><a href="/archives">
+        时间轴
+      </a></div>
+    
+    <div class="nav-item"><a href="/tags">
+        标签
+      </a></div>
+    
+    <div class="nav-item"><a href="/about">
+        关于
+      </a></div>
+    
+</nav>
+    <main>
+        <div class="wrapper">
+    
+      
+        <article class="card ">
+  
+              
+                <div class="posted-on">『22年11月19日』</div>
+                <h3 class="article-title"><a href="/2022/11/19/heap-sort/"><span>
+                      重学数据结构与算法 - 堆排序
+                    </span></a></h3>
+                
+                    
+                      <div class="article-top-meta">
+                        
+                          
+                            <a href="/tags/数据结构/" class="post-tag">数据结构</a><a href="/tags/二叉堆/" class="post-tag">二叉堆</a><a href="/tags/堆排序/" class="post-tag">堆排序</a>
+                              
+                      </div>
+                      
+
+                          <div class="article-content">
+                            <div class="entry">
+                              
+                                <p>之前学到二叉堆的时候，发现可以利用二叉堆来做排序算法。其基本原理就是利用其堆顶元素为数组的最大值或者最小值的特性，截取堆顶元素后再重新调整为最大或最小堆，最后按顺序截取的堆顶元素就是一个升序序列或将序序列。</p>
+<h3 id="堆化算法"><a href="#堆化算法" class="headerlink" title="堆化算法"></a>堆化算法</h3><blockquote>
+<p>移除堆顶元素，将堆的最后一个元素移动到堆顶，从堆顶开始调整堆，直到合适的位置。</p>
+</blockquote>
+<h3 id="算法思路"><a href="#算法思路" class="headerlink" title="算法思路"></a>算法思路</h3><ol>
+<li>构建一个最大堆，堆顶元素为最大值;</li>
+<li>交换堆顶元素和堆的最后一个元素，标记最后的元素为堆化截止点；</li>
+<li>调整堆为最大堆，直到堆化截止点；</li>
+<li>交换堆顶元素和上次的堆化截止点，重新调整截止点；</li>
+<li>重复 2-3 步骤；</li>
+<li>直到截止点为 1；</li>
+</ol>
+                                  <p class="read-more"> <a href="/2022/11/19/heap-sort/" title="read more">
+                                      阅读更多<a></p>
+                                  
+                            </div>
+                          </div>
+                          <div class="article-footer">
+
+                          </div>
+</article>
+       
+      
+      
+        <article class="card ">
+  
+              
+                <div class="posted-on">『22年10月23日』</div>
+                <h3 class="article-title"><a href="/2022/10/23/data-structure-graph-1/"><span>
+                      重学数据结构与算法 - 图(Dijkstra&#39;s algorithm)
+                    </span></a></h3>
+                
+                    
+                      <div class="article-top-meta">
+                        
+                          
+                            <a href="/tags/数据结构/" class="post-tag">数据结构</a><a href="/tags/图/" class="post-tag">图</a>
+                              
+                      </div>
+                      
+
+                          <div class="article-content">
+                            <div class="entry">
+                              
+                                <p>Dijkstra’s algorithm (迪杰斯特拉算法)是一个单源最短路径的算法，即从一个顶点出发到其它顶点的最短路径计算。</p>
+<p><img src="/2022/10/23/data-structure-graph-1/banner.png" alt="alt"><br>图：来自小破站 up 主</p>
+<p>最近发现一个挺有意思的 up 主，ID 是 - “笑笑的计算之心”，有想学习算法的同学可以关注下。小姐姐用了 <a target="_blank" rel="noopener" href="https://docs.manim.org.cn/">Manim CE</a> 制作了很多经典算法的动画演变过程。同时，也使用了很多《算法导论》里的伪代码，感觉质量还是蛮高的。</p>
+                                  <p class="read-more"> <a href="/2022/10/23/data-structure-graph-1/" title="read more">
+                                      阅读更多<a></p>
+                                  
+                            </div>
+                          </div>
+                          <div class="article-footer">
+
+                          </div>
+</article>
+       
+      
+      
+        <article class="card ">
+  
+              
+                <div class="posted-on">『22年10月05日』</div>
+                <h3 class="article-title"><a href="/2022/10/05/data-structure-graph/"><span>
+                      重学数据结构与算法 - 图(上)
+                    </span></a></h3>
+                
+                    
+                      <div class="article-top-meta">
+                        
+                          
+                            <a href="/tags/数据结构/" class="post-tag">数据结构</a><a href="/tags/图/" class="post-tag">图</a>
+                              
+                      </div>
+                      
+
+                          <div class="article-content">
+                            <div class="entry">
+                              
+                                <p>图是一组由边连接的节点（或顶点）。它有以下几种表示方法：</p>
+<ol>
+<li>邻接矩阵；</li>
+<li>邻接表；</li>
+<li>关联矩阵；</li>
+</ol>
+<p><strong>邻接矩阵表示法</strong></p>
+<ul>
+<li>可以使用二维数组来存储邻接矩阵，数组的下标表示节点，值表示两个节点直接有没边，有边则为 1，否则为 0</li>
+<li>如果图的边带有权重，则可以把 1 换为权重的值</li>
+</ul>
+<p><strong>邻接表表示法</strong><br>记录每个节点，及其相邻节点的数据结构。可以用字典、对象来存储邻接表</p>
+<p>以下，我们使用邻接表法来创建一个图。</p>
+                                  <p class="read-more"> <a href="/2022/10/05/data-structure-graph/" title="read more">
+                                      阅读更多<a></p>
+                                  
+                            </div>
+                          </div>
+                          <div class="article-footer">
+
+                          </div>
+</article>
+       
+      
+      
+        <article class="card ">
+  
+              
+                <div class="posted-on">『22年09月29日』</div>
+                <h3 class="article-title"><a href="/2022/09/29/book-of-oo-principles-of-js/"><span>
+                      读书摘要 -《JavaScript 面向对象精要》
+                    </span></a></h3>
+                
+                    
+                      <div class="article-top-meta">
+                        
+                          
+                            <a href="/tags/读书摘要/" class="post-tag">读书摘要</a><a href="/tags/JavaScript/" class="post-tag">JavaScript</a>
+                              
+                      </div>
+                      
+
+                          <div class="article-content">
+                            <div class="entry">
+                              
+                                <p><img src="/2022/09/29/book-of-oo-principles-of-js/banner.jpeg" alt="banner"><br>图：书本封面</p>
+<p>分享最近读的一本书 -《JavaScript 面向对象精要》，作者是尼古拉斯（Nicholas C. Zakas），著名的 JavaScript 开发者。你可能会因为他的另外一本书而熟悉-《JavaScript 高级程序设计》，熟称红宝书。作者文笔干练，每次都能用简洁、优雅的语言直击核心要点，另读者心领神会，就像这本书一样，短短 90 页内容，却贯穿了整个 JavaScript 最核心的部分。</p>
+                                  <p class="read-more"> <a href="/2022/09/29/book-of-oo-principles-of-js/" title="read more">
+                                      阅读更多<a></p>
+                                  
+                            </div>
+                          </div>
+                          <div class="article-footer">
+
+                          </div>
+</article>
+       
+      
+      
+        <article class="card ">
+  
+              
+                <div class="posted-on">『22年09月19日』</div>
+                <h3 class="article-title"><a href="/2022/09/19/heap/"><span>
+                      重学数据结构与算法-二叉堆
+                    </span></a></h3>
+                
+                    
+                      <div class="article-top-meta">
+                        
+                          
+                            <a href="/tags/数据结构/" class="post-tag">数据结构</a><a href="/tags/二叉堆/" class="post-tag">二叉堆</a>
+                              
+                      </div>
+                      
+
+                          <div class="article-content">
+                            <div class="entry">
+                              
+                                <p><img src="/2022/09/19/heap/bg.jpeg" alt="斗西"><br>图：斗西路口</p>
+<p>二叉堆是一种特殊的二叉树，具有以下两个特性：</p>
+<ul>
+<li><strong>结构特性</strong><br>它是一颗完全二叉树，表示树的每一层都有左侧和右侧子节点（除了最后一层的叶节点），并且最后一层的叶节点尽可能是左侧子节点</li>
+<li><strong>堆特性</strong><br>不是最大堆就是最小堆。所有节点都大于等于（最大堆）或者小于等于（最小堆）它的左右子节点</li>
+</ul>
+                                  <p class="read-more"> <a href="/2022/09/19/heap/" title="read more">
+                                      阅读更多<a></p>
+                                  
+                            </div>
+                          </div>
+                          <div class="article-footer">
+
+                          </div>
+</article>
+       
+      
+    
+</div>
+
+<nav class="pagination">
+<a href="/" class="pagination-prev">
+ <strong>前へ</strong>
+</a>
+
+
+
+  <a href="/" class="pagination-item ">
+  1
+  </a>
+
+
+
+
+  <a href="/page/2/" class="pagination-item active">
+  2
+  </a>
+  
+
+
+  <a href="/page/3/" class="pagination-item ">
+  3
+  </a>
+  
+
+<a href="/page/3/" class="pagination-next">
+   <strong>次に</strong>
+</a>
+</nav>
+
+    </main>
+    <div class="footer">
+  <div class="copy">
+    &copy;
+      2023 君の名は。|
+        によって作成されたテーマ<a href="https://github.com/JackZong" target="_blank" title="Theme created by @J.zong">@J.zong</a>
+  </div>
+  <div class="hexo">
+    <span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+  </div>
+  <div class="hexo" title="Powered by Hexo">
+    搭載 <a href="http://hexo.io/" target="_blank">Hexo</a> | <a href="javascript:void(0);" id="bgToggle"> 背景画像 </a>
+  </div>
+</div>
+
+<script>
+  window.onload = function () {
+    const withBg = localStorage.getItem('withBg');
+    if (withBg === 'true') {
+      document.body.classList.add('with-bg');
+      document.getElementById('bgToggle').classList.add('active');
+    }
+
+    document.getElementById('bgToggle').addEventListener('click', function (e) {
+      e.preventDefault();
+      const withBg = localStorage.getItem('withBg');
+      if (withBg === 'true') {
+        localStorage.setItem('withBg', 'false');
+        document.body.classList.remove('with-bg');
+        document.getElementById('bgToggle').classList.remove('active');
+      } else {
+        localStorage.setItem('withBg', 'true');
+        document.body.classList.add('with-bg');
+        document.getElementById('bgToggle').classList.add('active');
+      }
+    })
+  }
+</script>
+
+
+  <script src="/plugins/highlight/highlight.pack.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  
+
+    
+      <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+      
+        </body>
+
+        </html>
+</body>
+</html>

@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>
+    君の名は
+  </title>
+  <link rel="icon" href="/imgs/favicon.ico">
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  <link rel="stylesheet" href="/plugins/highlight/styles/atom-one-dark.css">
+  <!-- Gitalk -->
+  
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+    <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+    <script>
+      window.addEventListener('load', () => {
+        const gitalkContainer = document.getElementById('gitalk-container');
+        if (!gitalkContainer) return;
+        const gitalk = new Gitalk({
+          clientID: 'c9f73c62f3102ab718ca',
+          clientSecret: 'baaae04e80a7772584de07c3c343d48a7d2670da',
+          repo: 'jackzong.github.io',      // The repository of store comments '
+          owner: 'JackZong',
+          admin: ['JackZong'],
+          id: location.pathname,      // Ensure uniqueness and length less than 50
+          distractionFreeMode: false  // Facebook-like distraction free mode
+        })
+        gitalk.render('gitalk-container');
+      })
+    </script>
+    
+<meta name="generator" content="Hexo 6.3.0"></head>
+<body>
+    <nav>
+  <div class="nav-item logo">
+    <a href="/">
+      <button class="btn btn-hover">
+        <span>
+          君の名は
+        </span>
+      </button>
+    </a>
+  </div>
+  
+    <div class="nav-item"><a href="/">
+        主页
+      </a></div>
+    
+    <div class="nav-item"><a href="/archives">
+        时间轴
+      </a></div>
+    
+    <div class="nav-item"><a href="/tags">
+        标签
+      </a></div>
+    
+    <div class="nav-item"><a href="/about">
+        关于
+      </a></div>
+    
+</nav>
+    <main>
+        <div class="post">
+    <article class="card post-article">
+  
+              
+                  <h3 class="article-title-detail"><span>
+                      重学数据结构与算法-二叉堆
+                    </span></h3>
+                  <div class="posted-on-detail">『22年09月19日』</div>
+                  
+                    
+                      <div class="article-top-meta">
+                        
+                      </div>
+                      
+
+                          <div class="article-content">
+                            <div class="entry">
+                              
+                                    <p><img src="/2022/09/19/heap/bg.jpeg" alt="斗西"><br>图：斗西路口</p>
+<p>二叉堆是一种特殊的二叉树，具有以下两个特性：</p>
+<ul>
+<li><strong>结构特性</strong><br>它是一颗完全二叉树，表示树的每一层都有左侧和右侧子节点（除了最后一层的叶节点），并且最后一层的叶节点尽可能是左侧子节点</li>
+<li><strong>堆特性</strong><br>不是最大堆就是最小堆。所有节点都大于等于（最大堆）或者小于等于（最小堆）它的左右子节点</li>
+</ul>
+<span id="more"></span>
+
+<p>下图展示了一些合法的二叉堆：<br><img src="/2022/09/19/heap/heap_example.png" alt="example"></p>
+<p><strong>二叉堆的常见操作</strong></p>
+<ul>
+<li>insert(value): 插入一个新节点</li>
+<li>extract(): 移除顶点，并返回顶点值</li>
+<li>findMininum(): 返回最小&#x2F;大值，但不移除这个值</li>
+</ul>
+<p><strong>数据结构</strong></p>
+<p>怎么用 JavaScript 定义最小堆的数据结构？</p>
+<p>通常，二叉树节点数据存储可以用链表也可以用数组，一般完全二叉树适合用数组来表示，因为这样就不需要存储子节点的指针，这样就可以节省存储空间，直接可以通过数组元素的位置计算出子节点的位置；其他类型的二叉树则不建议用数组来实现，因为并不是所有节点都遵循从左往右排列，所以节点的左右节点就容易为空，而造成数组空洞</p>
+<p>所以可以用数组的方式来存储一颗完全二叉树，而节点之间有这个的关系：</p>
+<p><img src="/2022/09/19/heap/heap_index.png" alt="example"></p>
+<p>对于给定位置 index 的节点：</p>
+<ul>
+<li>它的左子节点位置为 2 x index +1</li>
+<li>它的右子节点位置为 2 x index +2</li>
+<li>它的父节点位置为（index-1）&#x2F; 2 向下取整</li>
+</ul>
+<p>所以可以根据这个特性来构建二叉堆，以下以最小堆为例子：</p>
+<ol>
+<li>用数组来存储节点<pre>
+<code class='javascript'>
+class MinHeap &#123;
+ constructor() &#123;
+     this.heap = [];
+ &#125;
+ size() &#123;
+     return this.heap.length;
+ &#125;
+
+ leftChild(index) &#123;
+     return 2 * index + 1;
+ &#125;
+
+ rightChild(index) &#123;
+     return 2 * index + 2;
+ &#125;
+
+ parent(index) &#123;
+     return Math.floor((index - 1) / 2);
+ &#125;
+ &#125;</li>
+</ol>
+</code>
+</pre>
+
+<ol start="2">
+<li>插入算法</li>
+</ol>
+<ul>
+<li>如果是第一个元素，则直接插入</li>
+<li>如果已经不是第一个元素了，那么需要根据最小堆的规则（子节点必须永远大于等于父节点）调整二叉堆<pre>
+<code class='javascript'>
+insert(val) &#123;
+  if (this.size() === 0) &#123;
+    this.heap.push(val);
+  &#125; else &#123;
+    this.heap.push(val);
+    this.siftUp(this.heap.length - 1);
+  &#125;
+&#125;
+
+siftUp(index) &#123;
+  let parent = this.parent(index);
+  while (this.heap[parent] > this.heap[index]) &#123;
+    const temp = this.heap[parent];
+    this.heap[parent] = this.heap[index];
+    this.heap[index] = temp;
+    index = parent;
+    parent = this.parent(parent);
+  &#125;
+&#125;</li>
+</ul>
+</code>
+</pre>
+
+<ol start="3">
+<li>移除最小值算法</li>
+</ol>
+<ul>
+<li>最小堆的最小值就是数组的第一个元素</li>
+<li>如果只有一个元素，则直接移除</li>
+<li>如果不止一个元素，移除后要重新组建二叉堆（堆化），堆化的规则如下：<ul>
+<li>将最后一个元素移动到顶点</li>
+<li>从顶点开始重新调整堆</li>
+</ul>
+</li>
+</ul>
+<pre>
+<code class='javascript'>
+  extract() &#123;
+    // shift with an empty array will return undefined
+   if (this.size() <= 2) &#123;
+      return this.heap.shift();
+    &#125; else &#123;
+      const result = this.heap[0];
+      //  将最后一个元素移动顶点
+      this.heap[0] = this.heap.pop();
+      this.siftDown(0);
+      return result;
+    &#125;
+  &#125;
+  siftDown(index) &#123;
+    let leftChild = this.leftChild(index);
+    let rightChild = this.rightChild(index);
+    if (leftChild >= this.size()) return;
+    let current = index;
+    // 找到子树的最小节点并替换
+    if (typeof this.heap[leftChild] !== undefined &&
+      this.heap[current] > this.heap[leftChild]) &#123;
+      current = leftChild;
+    &#125;
+    if (typeof this.heap[rightChild] !== undefined &&
+      this.heap[current] > this.heap[rightChild]) &#123;
+      current = rightChild;
+    &#125;
+    // 如果没有比顶点小的节点了，那就可停止堆化操作了
+    if (current !== index) &#123;
+      const temp = this.heap[index];
+      this.heap[index] = this.heap[current];
+      this.heap[current] = temp;
+      this.siftDown(current);
+    &#125;
+    
+  &#125;
+  </code>
+  </pre>
+
+<ol start="4">
+<li>找到最小值</li>
+</ol>
+<ul>
+<li>最小值就是第一个元素，因为是最小堆<pre><code class='javascript'>
+  findMinimum() &#123;
+    return this.heap[0];
+  &#125;
+</code></pre></li>
+</ul>
+<p><strong>完整代码</strong></p>
+<p class="codepen" data-height="300" data-default-tab="js" data-slug-hash="RwMXXoO" data-user="jackzong" style="height: 300px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid; margin: 1em 0; padding: 1em;">
+  <span>See the Pen <a target="_blank" rel="noopener" href="https://codepen.io/jackzong/pen/RwMXXoO">
+  MinHeap</a> by JinZhang (<a target="_blank" rel="noopener" href="https://codepen.io/jackzong">@jackzong</a>)
+  on <a target="_blank" rel="noopener" href="https://codepen.io">CodePen</a>.</span>
+</p>
+<script async src="https://cpwebassets.codepen.io/assets/embed/ei.js"></script>
+
+<p><strong>二叉堆的应用</strong></p>
+<ul>
+<li>实现优先队列<br>比如，React 在其 scheduler 上的调度实现就是用了最小堆 <u><a target="_blank" rel="noopener" href="https://github.com/facebook/react/blob/main/packages/scheduler/src/SchedulerMinHeap.js">React 源码</a></u></li>
+<li>堆排序算法 <a target="_blank" rel="noopener" href="https://jackzong.github.io/2022/11/19/heap-sort/">链接</a></li>
+</ul>
+
+                                      
+                            </div>
+                          </div>
+                          <div class="article-footer">
+
+                          </div>
+</article>
+        
+            <div id="gitalk-container" class="card"></div>
+            
+</div>
+    </main>
+    <div class="footer">
+  <div class="copy">
+    &copy;
+      2023 君の名は。|
+        によって作成されたテーマ<a href="https://github.com/JackZong" target="_blank" title="Theme created by @J.zong">@J.zong</a>
+  </div>
+  <div class="hexo">
+    <span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+  </div>
+  <div class="hexo" title="Powered by Hexo">
+    搭載 <a href="http://hexo.io/" target="_blank">Hexo</a> | <a href="javascript:void(0);" id="bgToggle"> 背景画像 </a>
+  </div>
+</div>
+
+<script>
+  window.onload = function () {
+    const withBg = localStorage.getItem('withBg');
+    if (withBg === 'true') {
+      document.body.classList.add('with-bg');
+      document.getElementById('bgToggle').classList.add('active');
+    }
+
+    document.getElementById('bgToggle').addEventListener('click', function (e) {
+      e.preventDefault();
+      const withBg = localStorage.getItem('withBg');
+      if (withBg === 'true') {
+        localStorage.setItem('withBg', 'false');
+        document.body.classList.remove('with-bg');
+        document.getElementById('bgToggle').classList.remove('active');
+      } else {
+        localStorage.setItem('withBg', 'true');
+        document.body.classList.add('with-bg');
+        document.getElementById('bgToggle').classList.add('active');
+      }
+    })
+  }
+</script>
+
+
+  <script src="/plugins/highlight/highlight.pack.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  
+
+    
+      <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+      
+        </body>
+
+        </html>
+</body>
+</html>

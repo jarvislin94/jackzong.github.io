@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>
+    君の名は
+  </title>
+  <link rel="icon" href="/imgs/favicon.ico">
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  <link rel="stylesheet" href="/plugins/highlight/styles/atom-one-dark.css">
+  <!-- Gitalk -->
+  
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+    <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+    <script>
+      window.addEventListener('load', () => {
+        const gitalkContainer = document.getElementById('gitalk-container');
+        if (!gitalkContainer) return;
+        const gitalk = new Gitalk({
+          clientID: 'c9f73c62f3102ab718ca',
+          clientSecret: 'baaae04e80a7772584de07c3c343d48a7d2670da',
+          repo: 'jackzong.github.io',      // The repository of store comments '
+          owner: 'JackZong',
+          admin: ['JackZong'],
+          id: location.pathname,      // Ensure uniqueness and length less than 50
+          distractionFreeMode: false  // Facebook-like distraction free mode
+        })
+        gitalk.render('gitalk-container');
+      })
+    </script>
+    
+<meta name="generator" content="Hexo 6.3.0"></head>
+<body>
+    <nav>
+  <div class="nav-item logo">
+    <a href="/">
+      <button class="btn btn-hover">
+        <span>
+          君の名は
+        </span>
+      </button>
+    </a>
+  </div>
+  
+    <div class="nav-item"><a href="/">
+        主页
+      </a></div>
+    
+    <div class="nav-item"><a href="/archives">
+        时间轴
+      </a></div>
+    
+    <div class="nav-item"><a href="/tags">
+        标签
+      </a></div>
+    
+    <div class="nav-item"><a href="/about">
+        关于
+      </a></div>
+    
+</nav>
+    <main>
+        <div class="post">
+    <article class="card post-article">
+  
+              
+                  <h3 class="article-title-detail"><span>
+                      重学数据结构与算法 - 堆排序
+                    </span></h3>
+                  <div class="posted-on-detail">『22年11月19日』</div>
+                  
+                    
+                      <div class="article-top-meta">
+                        
+                      </div>
+                      
+
+                          <div class="article-content">
+                            <div class="entry">
+                              
+                                    <p>之前学到二叉堆的时候，发现可以利用二叉堆来做排序算法。其基本原理就是利用其堆顶元素为数组的最大值或者最小值的特性，截取堆顶元素后再重新调整为最大或最小堆，最后按顺序截取的堆顶元素就是一个升序序列或将序序列。</p>
+<h3 id="堆化算法"><a href="#堆化算法" class="headerlink" title="堆化算法"></a>堆化算法</h3><blockquote>
+<p>移除堆顶元素，将堆的最后一个元素移动到堆顶，从堆顶开始调整堆，直到合适的位置。</p>
+</blockquote>
+<h3 id="算法思路"><a href="#算法思路" class="headerlink" title="算法思路"></a>算法思路</h3><ol>
+<li>构建一个最大堆，堆顶元素为最大值;</li>
+<li>交换堆顶元素和堆的最后一个元素，标记最后的元素为堆化截止点；</li>
+<li>调整堆为最大堆，直到堆化截止点；</li>
+<li>交换堆顶元素和上次的堆化截止点，重新调整截止点；</li>
+<li>重复 2-3 步骤；</li>
+<li>直到截止点为 1；</li>
+</ol>
+<span id="more"></span>
+
+<h3 id="堆类型选择"><a href="#堆类型选择" class="headerlink" title="堆类型选择"></a>堆类型选择</h3><ul>
+<li>升序排序 &#x3D;&gt; 最大堆</li>
+<li>降序陪序 &#x3D;&gt; 最小堆</li>
+</ul>
+<h3 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h3><pre><code class='javascript'>
+// 升序排序 - 最大堆
+class MaxHeap &#123;
+  constructor() &#123;
+    this.heap = [];
+  &#125;
+
+  insert(val) &#123;
+    const &#123; heap &#125; = this;
+    heap.push(val);
+    if (heap.length > 1) &#123;
+      this._siftUp(heap.length - 1);
+    &#125;
+  &#125;
+
+  _siftUp(index) &#123;
+    const &#123; heap &#125; = this;
+    const parent = this.parent(index);
+    if (parent === undefined) return;
+    if (heap[parent] < heap[index]) &#123;
+      [heap[parent], heap[index]] = [heap[index], heap[parent]];
+      this._siftUp(parent);
+    &#125;
+  &#125;
+
+  sort() &#123;
+    const &#123; heap &#125; = this;
+    let length = heap.length - 1;
+    while (length > 0) &#123;
+      [heap[0], heap[length]] = [heap[length], heap[0]];
+      this._siftDown(0, length);
+      length--;
+    &#125;
+  &#125;
+
+  _siftDown(index, last) &#123;
+    const &#123; heap &#125; = this;
+    let current = index;
+    const left = this.leftChild(current);
+    const right = this.rightChild(current);
+    if (left >= last || right >= last) return;
+    if (heap[current] < heap[left]) &#123;
+      current = left;
+    &#125;
+    if (heap[current] < heap[right]) &#123;
+      current = right;
+    &#125;
+
+    if (current !== index) &#123;
+      [heap[current], heap[index]] = [heap[index], heap[current]];
+      this._siftDown(current, last);
+    &#125;
+  &#125;
+
+  leftChild(index) &#123;
+    return 2 * index + 1;
+  &#125;
+
+  rightChild(index) &#123;
+    return 2 * index + 2;
+  &#125;
+  parent(index) &#123;
+    if (index === 0) &#123;
+      return undefined;
+    &#125;
+    return Math.floor((index - 1) / 2);
+  &#125;
+
+  display() &#123;
+    console.log(this.heap);
+  &#125;
+&#125;
+
+const maxHeap = new MaxHeap();
+
+maxHeap.insert(1);
+maxHeap.insert(5);
+maxHeap.insert(4);
+
+maxHeap.insert(3);
+maxHeap.insert(2);
+maxHeap.insert(6);
+
+maxHeap.display();
+
+maxHeap.sort();
+
+maxHeap.display();
+</code></pre>
+
+<h3 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h3><ul>
+<li>可以用来实现优先队列，比如 React 的 Scheduler 的实现</li>
+</ul>
+<h3 id="算法分析"><a href="#算法分析" class="headerlink" title="算法分析"></a>算法分析</h3><p>这是一个不稳定算法，因为相同值的元素不能确保排序后位置不变</p>
+<h3 id="Code-Pen"><a href="#Code-Pen" class="headerlink" title="Code Pen"></a>Code Pen</h3><p><a target="_blank" rel="noopener" href="https://codepen.io/jackzong/pen/qBKpQjL">Code Pen</a></p>
+
+                                      
+                            </div>
+                          </div>
+                          <div class="article-footer">
+
+                          </div>
+</article>
+        
+            <div id="gitalk-container" class="card"></div>
+            
+</div>
+    </main>
+    <div class="footer">
+  <div class="copy">
+    &copy;
+      2023 君の名は。|
+        によって作成されたテーマ<a href="https://github.com/JackZong" target="_blank" title="Theme created by @J.zong">@J.zong</a>
+  </div>
+  <div class="hexo">
+    <span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+  </div>
+  <div class="hexo" title="Powered by Hexo">
+    搭載 <a href="http://hexo.io/" target="_blank">Hexo</a> | <a href="javascript:void(0);" id="bgToggle"> 背景画像 </a>
+  </div>
+</div>
+
+<script>
+  window.onload = function () {
+    const withBg = localStorage.getItem('withBg');
+    if (withBg === 'true') {
+      document.body.classList.add('with-bg');
+      document.getElementById('bgToggle').classList.add('active');
+    }
+
+    document.getElementById('bgToggle').addEventListener('click', function (e) {
+      e.preventDefault();
+      const withBg = localStorage.getItem('withBg');
+      if (withBg === 'true') {
+        localStorage.setItem('withBg', 'false');
+        document.body.classList.remove('with-bg');
+        document.getElementById('bgToggle').classList.remove('active');
+      } else {
+        localStorage.setItem('withBg', 'true');
+        document.body.classList.add('with-bg');
+        document.getElementById('bgToggle').classList.add('active');
+      }
+    })
+  }
+</script>
+
+
+  <script src="/plugins/highlight/highlight.pack.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  
+
+    
+      <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+      
+        </body>
+
+        </html>
+</body>
+</html>

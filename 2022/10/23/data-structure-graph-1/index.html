@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>
+    君の名は
+  </title>
+  <link rel="icon" href="/imgs/favicon.ico">
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  <link rel="stylesheet" href="/plugins/highlight/styles/atom-one-dark.css">
+  <!-- Gitalk -->
+  
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+    <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+    <script>
+      window.addEventListener('load', () => {
+        const gitalkContainer = document.getElementById('gitalk-container');
+        if (!gitalkContainer) return;
+        const gitalk = new Gitalk({
+          clientID: 'c9f73c62f3102ab718ca',
+          clientSecret: 'baaae04e80a7772584de07c3c343d48a7d2670da',
+          repo: 'jackzong.github.io',      // The repository of store comments '
+          owner: 'JackZong',
+          admin: ['JackZong'],
+          id: location.pathname,      // Ensure uniqueness and length less than 50
+          distractionFreeMode: false  // Facebook-like distraction free mode
+        })
+        gitalk.render('gitalk-container');
+      })
+    </script>
+    
+<meta name="generator" content="Hexo 6.3.0"></head>
+<body>
+    <nav>
+  <div class="nav-item logo">
+    <a href="/">
+      <button class="btn btn-hover">
+        <span>
+          君の名は
+        </span>
+      </button>
+    </a>
+  </div>
+  
+    <div class="nav-item"><a href="/">
+        主页
+      </a></div>
+    
+    <div class="nav-item"><a href="/archives">
+        时间轴
+      </a></div>
+    
+    <div class="nav-item"><a href="/tags">
+        标签
+      </a></div>
+    
+    <div class="nav-item"><a href="/about">
+        关于
+      </a></div>
+    
+</nav>
+    <main>
+        <div class="post">
+    <article class="card post-article">
+  
+              
+                  <h3 class="article-title-detail"><span>
+                      重学数据结构与算法 - 图(Dijkstra&#39;s algorithm)
+                    </span></h3>
+                  <div class="posted-on-detail">『22年10月23日』</div>
+                  
+                    
+                      <div class="article-top-meta">
+                        
+                      </div>
+                      
+
+                          <div class="article-content">
+                            <div class="entry">
+                              
+                                    <p>Dijkstra’s algorithm (迪杰斯特拉算法)是一个单源最短路径的算法，即从一个顶点出发到其它顶点的最短路径计算。</p>
+<p><img src="/2022/10/23/data-structure-graph-1/banner.png" alt="alt"><br>图：来自小破站 up 主</p>
+<p>最近发现一个挺有意思的 up 主，ID 是 - “笑笑的计算之心”，有想学习算法的同学可以关注下。小姐姐用了 <a target="_blank" rel="noopener" href="https://docs.manim.org.cn/">Manim CE</a> 制作了很多经典算法的动画演变过程。同时，也使用了很多《算法导论》里的伪代码，感觉质量还是蛮高的。</p>
+<span id="more"></span>
+
+<p><strong>算法的基本思路：</strong></p>
+<ol>
+<li>将所有节点加入一个集合中 - UnReachSet；</li>
+<li>给每个节点添加 key 和 previous 属性，key 表示源点到自己的最小权重，previous 表示上个节点；</li>
+<li>初始化所有节点的 key 为无限大，previous 为空；</li>
+<li>初始化源点的 key 为 0，因为自己到自己的距离为 0;</li>
+<li>循环从 UnReachSet 寻找 key 最小的值，并剔出；</li>
+<li>寻找 5 的邻居节点，并进行松弛操作</li>
+<li>直到 UnReachSet 为空</li>
+</ol>
+<p><strong>Pseudo Code</strong></p>
+<pre><code class='javascript'>
+
+DIJKSTRA(G,s) &#123;
+  UnReachSet = G.V
+  set all vertices v.key = ∞
+  set all vertices v.previous = ∅
+  s.key = 0
+  while UnReachSet != ∅
+    v = EXTRACT-MIN(UnReachSet)
+    for each neighbor u of v
+    // Relax edge(v,u)
+      if u.key > v.key + weight(v,u)
+        u.key = v.key + weight(v,u)
+        u.previous = v
+&#125;
+
+</code></pre>
+
+<p><strong>松弛操作</strong></p>
+<p>伪代码中的 <code>Relax edge</code> 其实是一种技术，叫做“松弛操作”</p>
+<p>松弛技术是算法导论里的一个概念，目的是对节点间的距离的上界进行收紧，背后有一套复杂的数学论证，对于数学不好的我来说，可以说是完全看不懂 ：）。那就到这吧</p>
+<p><strong>例子：</strong></p>
+<p><img src="/2022/10/23/data-structure-graph-1/example.png" alt="alt"></p>
+<p>现在以这个 <code>有向加权图</code>为例子，找到从 A 节点出发到其它节点的最短路径</p>
+<ol>
+<li>先写出这个图的<code>邻接矩阵</code>表示</li>
+</ol>
+<p><strong>图的邻接矩阵表示</strong></p>
+<pre><code class='javascript'>
+const graph = [
+  [0, 2, 4, 0, 0, 0],
+  [0, 0, 2, 4, 2, 0],
+  [0, 0, 0, 0, 3, 0],
+  [0, 0, 0, 0, 0, 2],
+  [0, 0, 0, 3, 0, 2],
+  [0, 0, 0, 0, 0, 0]
+];
+</code></pre>
+
+<p><strong>代码实现</strong></p>
+<pre><code class='javascript'>
+// 找出dist中的最小值
+const extractMinKey = (set) => &#123;
+  let minValue = Number.MAX_SAFE_INTEGER;
+  let minKey = null;
+  Object.keys(set).forEach((k) => &#123;
+    if (!set[k].visited && set[k].key < minValue) &#123;
+      minValue = set[k].key;
+      minKey = k;
+    &#125;
+  &#125;);
+  if (minKey) set[minKey].visited = true;
+  return minKey;
+&#125;;
+
+// 接受图的邻接矩阵，源点作为参数
+const dijkstra = (graph, src) => &#123;
+  const unReachSet1 = &#123;&#125;;
+  const INF = Number.MAX_SAFE_INTEGER;
+  for (let i = 0; i < graph.length; i++) &#123;
+    unReachSet1[i] = &#123;
+      key: INF,
+      previous: null,
+      visited: false
+    &#125;;
+  &#125;
+  unReachSet1[src].key = 0;
+  const unReachSet = &#123; ...unReachSet1 &#125;;
+  while (Object.keys(unReachSet).length) &#123;
+    const v = extractMinKey(unReachSet);
+    for (let i = 0; i < graph.length; i++) &#123;
+      // 找到邻居节点
+      if (graph[v] && graph[v][i] !== 0) &#123;
+        // 松弛操作
+        if (
+          unReachSet[i] &&
+          unReachSet[v] &&
+          unReachSet[i].key > unReachSet[v].key + graph[v][i]
+        ) &#123;
+          unReachSet[i].key = unReachSet[v].key + graph[v][i];
+          unReachSet[i].previous = v;
+        &#125;
+      &#125;
+    &#125;
+    if (v) delete unReachSet[v];
+  &#125;
+  return unReachSet1;
+&#125;;
+
+console.log(dijkstra(graph, 0));
+
+
+</code></pre>
+
+<p><strong>Code pen</strong><br><a target="_blank" rel="noopener" href="https://codepen.io/jackzong/pen/abKodWe">https://codepen.io/jackzong/pen/abKodWe</a></p>
+<p><strong>算法的优缺点</strong></p>
+<ul>
+<li>不支持权重为负值</li>
+</ul>
+<p><strong>Reference</strong><br><a target="_blank" rel="noopener" href="https://www.ituring.com.cn/book/2653">《学习 JavaScript 数据结构与算法（第 3 版）》</a><br><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1JA4y1Q7PB/?spm_id_from=333.788&vd_source=ef7229486e8f532e0c0dec2c64aee529">一个漂亮的 up 主</a></p>
+
+                                      
+                            </div>
+                          </div>
+                          <div class="article-footer">
+
+                          </div>
+</article>
+        
+            <div id="gitalk-container" class="card"></div>
+            
+</div>
+    </main>
+    <div class="footer">
+  <div class="copy">
+    &copy;
+      2023 君の名は。|
+        によって作成されたテーマ<a href="https://github.com/JackZong" target="_blank" title="Theme created by @J.zong">@J.zong</a>
+  </div>
+  <div class="hexo">
+    <span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+  </div>
+  <div class="hexo" title="Powered by Hexo">
+    搭載 <a href="http://hexo.io/" target="_blank">Hexo</a> | <a href="javascript:void(0);" id="bgToggle"> 背景画像 </a>
+  </div>
+</div>
+
+<script>
+  window.onload = function () {
+    const withBg = localStorage.getItem('withBg');
+    if (withBg === 'true') {
+      document.body.classList.add('with-bg');
+      document.getElementById('bgToggle').classList.add('active');
+    }
+
+    document.getElementById('bgToggle').addEventListener('click', function (e) {
+      e.preventDefault();
+      const withBg = localStorage.getItem('withBg');
+      if (withBg === 'true') {
+        localStorage.setItem('withBg', 'false');
+        document.body.classList.remove('with-bg');
+        document.getElementById('bgToggle').classList.remove('active');
+      } else {
+        localStorage.setItem('withBg', 'true');
+        document.body.classList.add('with-bg');
+        document.getElementById('bgToggle').classList.add('active');
+      }
+    })
+  }
+</script>
+
+
+  <script src="/plugins/highlight/highlight.pack.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  
+
+    
+      <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+      
+        </body>
+
+        </html>
+</body>
+</html>

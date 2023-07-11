@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>
+    君の名は
+  </title>
+  <link rel="icon" href="/imgs/favicon.ico">
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  <link rel="stylesheet" href="/plugins/highlight/styles/atom-one-dark.css">
+  <!-- Gitalk -->
+  
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+    <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+    <script>
+      window.addEventListener('load', () => {
+        const gitalkContainer = document.getElementById('gitalk-container');
+        if (!gitalkContainer) return;
+        const gitalk = new Gitalk({
+          clientID: 'c9f73c62f3102ab718ca',
+          clientSecret: 'baaae04e80a7772584de07c3c343d48a7d2670da',
+          repo: 'jackzong.github.io',      // The repository of store comments '
+          owner: 'JackZong',
+          admin: ['JackZong'],
+          id: location.pathname,      // Ensure uniqueness and length less than 50
+          distractionFreeMode: false  // Facebook-like distraction free mode
+        })
+        gitalk.render('gitalk-container');
+      })
+    </script>
+    
+<meta name="generator" content="Hexo 6.3.0"></head>
+<body>
+    <nav>
+  <div class="nav-item logo">
+    <a href="/">
+      <button class="btn btn-hover">
+        <span>
+          君の名は
+        </span>
+      </button>
+    </a>
+  </div>
+  
+    <div class="nav-item"><a href="/">
+        主页
+      </a></div>
+    
+    <div class="nav-item"><a href="/archives">
+        时间轴
+      </a></div>
+    
+    <div class="nav-item"><a href="/tags">
+        标签
+      </a></div>
+    
+    <div class="nav-item"><a href="/about">
+        关于
+      </a></div>
+    
+</nav>
+    <main>
+        <div class="post">
+    <article class="card post-article">
+  
+              
+                  <h3 class="article-title-detail"><span>
+                      重学数据结构与算法 - 图(上)
+                    </span></h3>
+                  <div class="posted-on-detail">『22年10月05日』</div>
+                  
+                    
+                      <div class="article-top-meta">
+                        
+                      </div>
+                      
+
+                          <div class="article-content">
+                            <div class="entry">
+                              
+                                    <p>图是一组由边连接的节点（或顶点）。它有以下几种表示方法：</p>
+<ol>
+<li>邻接矩阵；</li>
+<li>邻接表；</li>
+<li>关联矩阵；</li>
+</ol>
+<p><strong>邻接矩阵表示法</strong></p>
+<ul>
+<li>可以使用二维数组来存储邻接矩阵，数组的下标表示节点，值表示两个节点直接有没边，有边则为 1，否则为 0</li>
+<li>如果图的边带有权重，则可以把 1 换为权重的值</li>
+</ul>
+<p><strong>邻接表表示法</strong><br>记录每个节点，及其相邻节点的数据结构。可以用字典、对象来存储邻接表</p>
+<p>以下，我们使用邻接表法来创建一个图。</p>
+<span id="more"></span>
+
+<p><img src="/2022/10/05/data-structure-graph/graph_example.png" alt="example"><br>图：即将创建的图和它的邻接表表示法</p>
+<p><strong>定义图类的操作方法</strong></p>
+<ul>
+<li>addVertex(vertex:string):void 用来添加图的节点</li>
+<li>addEdge(from:string,to:string):void 用来添加节点的邻居节点</li>
+</ul>
+<p><strong>数据结构</strong></p>
+<p>怎么用 JavaScript 定义图的数据结构？<br>因为我们要使用邻接表法来创建图，所以一般是一个节点对应一组邻居节点，那么就可以使用对象来记录，键为节点，值为邻居节点数组。然后我们再用一个字段来表示是 <em>有向图</em> 还是 _无向图_，有向图的话代表如果 A 到 B 有边，那么 B 到 A 也是有边的。</p>
+<ol>
+<li><p>声明图的骨架<br>使用<code>neighbors</code>对象来存储邻接表</p>
+ <pre><code class='javascript'>
+ class Graph &#123;
+     constructor(isDirected) &#123;
+         this.vertices = [];
+         this.neighbors = &#123;&#125;;
+         // 有向图还是无向图
+         this.isDirected = isDirected;
+     &#125;
+ &#125;
+ </code></pre>
+</li>
+<li><p>实现添加图的节点</p>
+<pre><code class='javascript'>
+addVertex(vertex) &#123;
+  this.vertices.push(vertex);
+  // 顺便初始化邻接表
+  this.neighbors[vertex] = [];
+&#125;
+</code></pre>
+</li>
+<li><p>实现添加节点间的边</p>
+<pre><code class='javascript'>
+addEdge(from,to) &#123;
+  this.neighbors[from].push(to);
+  //如果是无向图，则反向也是有边
+  if(!this.isDirected) &#123;
+    this.neighbors[to].push(from);
+  &#125;
+&#125;
+</code></pre>
+</li>
+<li><p>使用方法</p>
+<pre><code class='javascript'>
+// 1. 实例化Graph类
+const graph = new Graph(false);
+// 2. 添加节点
+const vertexes = ["A", "B", "C", "D", "E", "F", "G", "H", "I"];
+vertexes.forEach((item) => graph.addVertex(item));
+// 3. 添加节点边的关系
+graph.addVertex();
+graph.addEdge("A", "B");
+graph.addEdge("A", "C");
+graph.addEdge("A", "D");
+graph.addEdge("B", "E");
+graph.addEdge("B", "F");
+graph.addEdge("C", "D");
+graph.addEdge("C", "G");
+graph.addEdge("D", "G");
+graph.addEdge("D", "H");
+graph.addEdge("E", "I");
+</code></pre></li>
+</ol>
+<p><strong>图的遍历</strong><br>图的遍历本质上是访问图的所有节点，可以用来实现查找某个节点，寻找两个节点间的路径，检查图是否连通，检查图是否有环</p>
+<p>有两种遍历图的方法：</p>
+<ul>
+<li>广度优先遍历（breadth-first search）</li>
+<li>深度优先遍历 (depth-first search)</li>
+</ul>
+<p>两种遍历方法解决思路：</p>
+<ol>
+<li>从图的一个节点出发，标记当前节点为<code>被发现的</code></li>
+<li>然后记录当前节点的所有<code>未被发现</code>的邻居节点到一个待访问列表</li>
+<li>然后就可把当前节点标记为<code>已访问</code></li>
+<li>再递归地访问待访问列表中的节点</li>
+</ol>
+<p>其中涉及到节点的三种状态<code>未被发现``被发现的``已访问</code> + 待访问列表</p>
+<p>两种遍历方法的差别仅在于待访问列表的数据结构，bfs 使用队列而 dfs 使用栈，队列则遵循 FIFO 原则，栈则遵循 LIFO 原则</p>
+<p>所以，可以根据上面的解决思路来实现具体的算法。</p>
+<ol>
+<li><p>先定义节点的三种状态</p>
+<pre><code class='javascript'>
+const Vertex_Status = &#123;
+ notVisited:0,
+ visited:1,
+ found:2
+&#125;
+
+// 初始化每个节点都是未访问的
+
+</code></pre>
+</li>
+<li><p>广度优先遍历</p>
+</li>
+</ol>
+  <pre><code class='typescript'>
+  const BFS = (graph:Graph, topVertex:string) => &#123;
+  // 使用队列存储待访问列表
+  const queue = [];
+  const vertexes = graph.vertices;
+  const status = &#123;&#125;;
+  vertexes.forEach((vertex) => &#123;
+    status[vertex] = Vertex_Status.notVisited;
+  &#125;);
+  queue.push(topVertex);
+  status[topVertex] = Vertex_Status.found;
+  while (queue.length) &#123;
+    // 出对，先进先出
+    const current = queue.shift();
+    const neighbors = graph.neighbors[current];
+    for (let i = 0; i < neighbors.length; ++i) &#123;
+      if (colors[neighbors[i]] === Colors.white) &#123;
+        status[neighbors[i]] = Vertex_Status.found;
+        queue.push(neighbors[i]);
+      &#125;
+    &#125;
+    status[current] = Vertex_Status.visited;
+    console.log(current);
+  &#125;
+  &#125;;
+
+  BFS(graph,graph.vertices[0])
+  // 输出结果 A B C D E F G H I
+  </code></pre>
+
+<p>示图：<br><img src="/2022/10/05/data-structure-graph/bfs.png" alt="alt"></p>
+<ol start="3">
+<li>深度优先遍历</li>
+</ol>
+<pre><code class='javascript'>
+
+const depthFirstSearch = (graph) => &#123;
+  const vertexes = graph.vertexes;
+  const neighbors = graph.neighbors;
+  const status = &#123;&#125;;
+  vertexes.forEach((vertex) => &#123;
+    status[vertex] = Vertex_Status.notVisited;
+  &#125;);
+
+  for (let i = 0; i < vertexes.length; ++i) &#123;
+    if (status[vertexes[i]] === Vertex_Status.notVisited) &#123;
+      dfs(vertexes[i], status, graph);
+    &#125;
+  &#125;
+&#125;;
+
+function dfs(u, colors, graph) &#123;
+  status[u] = Vertex_Status.found;
+  const neighbors = graph.neighbors[u];
+  for (let i = 0; i < neighbors.length; i++) &#123;
+    if (status[neighbors[i]] === Vertex_Status.notVisited) &#123;
+      dfs(neighbors[i], status, graph);
+    &#125;
+  &#125;
+  status[u] = Vertex_Status.visited;
+  console.log(u);
+&#125;
+
+// depthFirstSearch(graph);
+// 输出结果：I E F B G H D C A
+</code></pre>
+
+<p>示图<br><img src="/2022/10/05/data-structure-graph/dfs.png" alt="alt"></p>
+<p>如何使用这两个算法原理做更多的事情？下次再讲下 ：）</p>
+<p><strong>Reference</strong>：<br><a target="_blank" rel="noopener" href="https://www.ituring.com.cn/book/2653">《学习 JavaScript 数据结构与算法（第 3 版）》</a></p>
+
+                                      
+                            </div>
+                          </div>
+                          <div class="article-footer">
+
+                          </div>
+</article>
+        
+            <div id="gitalk-container" class="card"></div>
+            
+</div>
+    </main>
+    <div class="footer">
+  <div class="copy">
+    &copy;
+      2023 君の名は。|
+        によって作成されたテーマ<a href="https://github.com/JackZong" target="_blank" title="Theme created by @J.zong">@J.zong</a>
+  </div>
+  <div class="hexo">
+    <span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+  </div>
+  <div class="hexo" title="Powered by Hexo">
+    搭載 <a href="http://hexo.io/" target="_blank">Hexo</a> | <a href="javascript:void(0);" id="bgToggle"> 背景画像 </a>
+  </div>
+</div>
+
+<script>
+  window.onload = function () {
+    const withBg = localStorage.getItem('withBg');
+    if (withBg === 'true') {
+      document.body.classList.add('with-bg');
+      document.getElementById('bgToggle').classList.add('active');
+    }
+
+    document.getElementById('bgToggle').addEventListener('click', function (e) {
+      e.preventDefault();
+      const withBg = localStorage.getItem('withBg');
+      if (withBg === 'true') {
+        localStorage.setItem('withBg', 'false');
+        document.body.classList.remove('with-bg');
+        document.getElementById('bgToggle').classList.remove('active');
+      } else {
+        localStorage.setItem('withBg', 'true');
+        document.body.classList.add('with-bg');
+        document.getElementById('bgToggle').classList.add('active');
+      }
+    })
+  }
+</script>
+
+
+  <script src="/plugins/highlight/highlight.pack.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  
+
+    
+      <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+      
+        </body>
+
+        </html>
+</body>
+</html>

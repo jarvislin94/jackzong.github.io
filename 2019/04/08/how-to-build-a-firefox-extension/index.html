@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>
+    君の名は
+  </title>
+  <link rel="icon" href="/imgs/favicon.ico">
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  <link rel="stylesheet" href="/plugins/highlight/styles/atom-one-dark.css">
+  <!-- Gitalk -->
+  
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+    <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+    <script>
+      window.addEventListener('load', () => {
+        const gitalkContainer = document.getElementById('gitalk-container');
+        if (!gitalkContainer) return;
+        const gitalk = new Gitalk({
+          clientID: 'c9f73c62f3102ab718ca',
+          clientSecret: 'baaae04e80a7772584de07c3c343d48a7d2670da',
+          repo: 'jackzong.github.io',      // The repository of store comments '
+          owner: 'JackZong',
+          admin: ['JackZong'],
+          id: location.pathname,      // Ensure uniqueness and length less than 50
+          distractionFreeMode: false  // Facebook-like distraction free mode
+        })
+        gitalk.render('gitalk-container');
+      })
+    </script>
+    
+<meta name="generator" content="Hexo 6.3.0"></head>
+<body>
+    <nav>
+  <div class="nav-item logo">
+    <a href="/">
+      <button class="btn btn-hover">
+        <span>
+          君の名は
+        </span>
+      </button>
+    </a>
+  </div>
+  
+    <div class="nav-item"><a href="/">
+        主页
+      </a></div>
+    
+    <div class="nav-item"><a href="/archives">
+        时间轴
+      </a></div>
+    
+    <div class="nav-item"><a href="/tags">
+        标签
+      </a></div>
+    
+    <div class="nav-item"><a href="/about">
+        关于
+      </a></div>
+    
+</nav>
+    <main>
+        <div class="post">
+    <article class="card post-article">
+  
+              
+                  <h3 class="article-title-detail"><span>
+                      How to build a firefox extension
+                    </span></h3>
+                  <div class="posted-on-detail">『19年04月08日』</div>
+                  
+                    
+                      <div class="article-top-meta">
+                        
+                      </div>
+                      
+
+                          <div class="article-content">
+                            <div class="entry">
+                              
+                                    <p><strong>before we start, we can introduce a development tool firstly</strong></p>
+<p><code>web-ext</code> which is a command line tool designed to speed up various parts of the extension development process, making development faster and easier.<br>you can install it to global environment.</p>
+<span id="more"></span>
+<pre><code>npm install --global web-ext
+</code></pre>
+<p>Now, we create a folder name “firebox-extension-demo”, and create a <code>manifest.json</code> file. we can build a firefox extension start from a <code>manifest.json</code>, the file is the enterance of a extension. The <code>manifest.json</code> should include the <code>name</code>, <code>version</code>,<code>manifest_version</code> at least.</p>
+<pre><code>    &quot;name&quot;: &quot;996.ICU&quot;,
+    &quot;version&quot;: &quot;1.0&quot;,
+    &quot;manifest_version&quot;: &quot;1.0&quot;,
+    &quot;description&quot;: &quot;firefox version of 996.ICU&quot;,
+    &quot;icons&quot;: &#123;
+        &quot;48&quot;: &quot;/icons/icon_48.png&quot;,
+        &quot;96&quot;: &quot;/icons/icon_96.png&quot;
+    &#125;,
+    &quot;content_scripts&quot;: [&#123;
+      &quot;matches&quot;: [],
+      &quot;js&quot;: [&quot;content.js&quot;]
+    &#125;],
+    &quot;background&quot;: &#123;
+      &quot;scripts&quot;: [&quot;background.js&quot;],
+      &quot;page&quot;: [&quot;background-page.htmml&quot;]
+    &#125;
+</code></pre>
+<p>“icons” will add a icon a firefox’s extension page, “content_scripts” ‘s value will be loaded to the “matches” URLs.</p>
+<p>Here is an image to descripe how a extension be structed;<br><img src="/integration-blog/assets/2019-04-08-How-to-build-a-firefox-extension/webextension-anatomy.svg" alt="firefox extension"></p>
+<h3 id="what’s-content-script"><a href="#what’s-content-script" class="headerlink" title="what’s content script?"></a><a href="#what%E2%80%99s-content-script" title="what’s content script?"></a>what’s content script?</h3><p>A content script is a part of your extension that runs in the context of a particular web page. Content scripts can access and modify the page’s DOM, just like normal page scripts can. Content scripts can only access a small subset of the WebExtension APIs. And the background script can access the full WebExtension APIs.</p>
+<p>then we go to the root folder of firefox extension, use command</p>
+<pre><code>web-ext run
+</code></pre>
+<p>This starts Firefox and loads the extension temporarily in the browser, and will auto reload when your source files are edited.</p>
+<p>and we build a <code>content.js</code> file</p>
+<p>Those are subset of WebExtensions API which content script can access to: extenstion.getURl,extension.inIncognitoContext, runtime APIs, includes connect(), getManifest(), getUrl(), onConnect(), onMessage() and sendMessage(), all storage APIs.</p>
+<h3 id="what’s-background-page"><a href="#what’s-background-page" class="headerlink" title="what’s background page?"></a><a href="#what%E2%80%99s-background-page" title="what’s background page?"></a>what’s background page?</h3><p>Sometimes, extensions often need to maintain long-term state or perform long-term operations independently of the lifetime of any particular web page or browser window. That is what background scripts are for.<br>You can descript a background script or you can descript a background page then load the background script. This can support the ES6 module.<br>Background page can access to <code>window</code> glogal varible, full DOM API and full WebExtensions API.</p>
+<h3 id="what’s-extensiton-page-standlong"><a href="#what’s-extensiton-page-standlong" class="headerlink" title="what’s extensiton page(standlong)?"></a><a href="#what%E2%80%99s-extensiton-page-standlong" title="what’s extensiton page(standlong)?"></a>what’s extensiton page(standlong)?</h3><p>The Firefox support three kinds of page to build a extension. they are slides, popup window and options page. And the support a special page to build your app.<br>you can use <code>window.create()</code> or <code>tab.create()</code> to create a standlong page.<br>This page can include html, css and javascript. it can access all full WebExtensions API too. But it has it’s own global.</p>
+<p>demo to create a extension page</p>
+<pre><code>const createData = &#123;
+  type: &#39;detached_panel&#39;, // &quot;normal&quot;, &quot;popup&quot;, &quot;panel&quot;, &quot;detached_panel&quot;
+  url: &#39;standlong.html&#39;,
+  width: 345,
+  heigt: 500,
+&#125;
+browser.window.create(createData)
+</code></pre>
+<h3 id="How-content-script-communicate-with-background-script"><a href="#How-content-script-communicate-with-background-script" class="headerlink" title="How content script communicate with background script?"></a><a href="#How-content-script-communicate-with-background-script" title="How content script communicate with background script?"></a>How content script communicate with background script?</h3><ol>
+<li>one-off message.</li>
+</ol>
+<p>content &#x3D;&gt; background</p>
+<pre><code>browser.runtime.sendMessage(extensionId, message, options);
+browser.runtime.onMessage.addListener(function(message, sender, sendRespone) &#123;&#125;);
+</code></pre>
+<p>background &#x3D;&gt; content</p>
+<pre><code>browser.tabs.sendMessage(tabId, message, options);
+browser.runtime.onMessage.addListener(function(message, sender, sendRespone) &#123;&#125;);
+</code></pre>
+<ol start="2">
+<li>connection-based messaging.<br>This is kind of longer-lived connection between the two contexts</li>
+</ol>
+<p>content &#x3D;&gt; background</p>
+<pre><code>// content
+browser.runtime.connect(&#123;&#125;);
+// background
+browser.runtime.onConnect.addListener(function(portFromCS) &#123;
+  portFromCS.onMessage.Listener(funciton(message)&#123;
+    console.log(&#39;message from content&#39;, message);
+  &#125;);
+&#125;);
+</code></pre>
+<h3 id="How-content-script-communicate-with-page-script"><a href="#How-content-script-communicate-with-page-script" class="headerlink" title="How content script communicate with page script?"></a><a href="#How-content-script-communicate-with-page-script" title="How content script communicate with page script?"></a>How content script communicate with page script?</h3><p>content script can’t access to page’s script directly, but it can use DOM window.postMessage() API and window.addEventListener API to access page’s script indirectly.<br>pagg &#x3D;&gt; content</p>
+<pre><code>// page
+window.postMessage(message, targetOrigin);
+// content
+window.addEventListener(&#39;message&#39;, function(event) &#123;
+ console.log(&#39;message from page script&#39;, event.data);
+&#125;)
+</code></pre>
+<p>content to page is the same.</p>
+
+                                      
+                            </div>
+                          </div>
+                          <div class="article-footer">
+
+                          </div>
+</article>
+        
+            <div id="gitalk-container" class="card"></div>
+            
+</div>
+    </main>
+    <div class="footer">
+  <div class="copy">
+    &copy;
+      2023 君の名は。|
+        によって作成されたテーマ<a href="https://github.com/JackZong" target="_blank" title="Theme created by @J.zong">@J.zong</a>
+  </div>
+  <div class="hexo">
+    <span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+  </div>
+  <div class="hexo" title="Powered by Hexo">
+    搭載 <a href="http://hexo.io/" target="_blank">Hexo</a> | <a href="javascript:void(0);" id="bgToggle"> 背景画像 </a>
+  </div>
+</div>
+
+<script>
+  window.onload = function () {
+    const withBg = localStorage.getItem('withBg');
+    if (withBg === 'true') {
+      document.body.classList.add('with-bg');
+      document.getElementById('bgToggle').classList.add('active');
+    }
+
+    document.getElementById('bgToggle').addEventListener('click', function (e) {
+      e.preventDefault();
+      const withBg = localStorage.getItem('withBg');
+      if (withBg === 'true') {
+        localStorage.setItem('withBg', 'false');
+        document.body.classList.remove('with-bg');
+        document.getElementById('bgToggle').classList.remove('active');
+      } else {
+        localStorage.setItem('withBg', 'true');
+        document.body.classList.add('with-bg');
+        document.getElementById('bgToggle').classList.add('active');
+      }
+    })
+  }
+</script>
+
+
+  <script src="/plugins/highlight/highlight.pack.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  
+
+    
+      <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+      
+        </body>
+
+        </html>
+</body>
+</html>

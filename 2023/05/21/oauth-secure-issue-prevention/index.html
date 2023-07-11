@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>
+    君の名は
+  </title>
+  <link rel="icon" href="/imgs/favicon.ico">
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  <link rel="stylesheet" href="/plugins/highlight/styles/atom-one-dark.css">
+  <!-- Gitalk -->
+  
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+    <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+    <script>
+      window.addEventListener('load', () => {
+        const gitalkContainer = document.getElementById('gitalk-container');
+        if (!gitalkContainer) return;
+        const gitalk = new Gitalk({
+          clientID: 'c9f73c62f3102ab718ca',
+          clientSecret: 'baaae04e80a7772584de07c3c343d48a7d2670da',
+          repo: 'jackzong.github.io',      // The repository of store comments '
+          owner: 'JackZong',
+          admin: ['JackZong'],
+          id: location.pathname,      // Ensure uniqueness and length less than 50
+          distractionFreeMode: false  // Facebook-like distraction free mode
+        })
+        gitalk.render('gitalk-container');
+      })
+    </script>
+    
+<meta name="generator" content="Hexo 6.3.0"></head>
+<body>
+    <nav>
+  <div class="nav-item logo">
+    <a href="/">
+      <button class="btn btn-hover">
+        <span>
+          君の名は
+        </span>
+      </button>
+    </a>
+  </div>
+  
+    <div class="nav-item"><a href="/">
+        主页
+      </a></div>
+    
+    <div class="nav-item"><a href="/archives">
+        时间轴
+      </a></div>
+    
+    <div class="nav-item"><a href="/tags">
+        标签
+      </a></div>
+    
+    <div class="nav-item"><a href="/about">
+        关于
+      </a></div>
+    
+</nav>
+    <main>
+        <div class="post">
+    <article class="card post-article">
+  
+              
+                  <h3 class="article-title-detail"><span>
+                      使用OAuth实现统一登录的安全防范
+                    </span></h3>
+                  <div class="posted-on-detail">『23年05月21日』</div>
+                  
+                    
+                      <div class="article-top-meta">
+                        
+                      </div>
+                      
+
+                          <div class="article-content">
+                            <div class="entry">
+                              
+                                    <p>当使用 OAuth2.0 去实现应用的统一登录验证时，会存在一些安全问题，值得开发者们思考与防范。特指 <code>authorization code</code> 模式。</p>
+<p>回顾一下<code>authorization code</code>授权登录的整个流程：</p>
+<ol>
+<li><p>到 <strong>OAuth Provider</strong> 注册一个应用，获取 app key(client ID) 和 app secret，并填写回调地址;</p>
+</li>
+<li><p>client 端引导用户打开统一登录页面，并携带<code>app key</code>。</p>
+</li>
+<li><p>用户登录完成后跳转到指定的<code>redirect_uri</code>，并返回<code>authorization code</code>。</p>
+<p>题外话：<em>implicit 模式貌似可在 step3 直接返回 token</em></p>
+</li>
+<li><p>第三方 app 服务端调用<code>OAuth Provider</code> 获取 token 的 API，通常是<code>/oauth/token</code>， 携带<code>authorization code</code>和<code>app key</code>、<code>app secret</code>去换取 token.</p>
+</li>
+<li><p>拿到 token 后就算登录成功了</p>
+</li>
+</ol>
+<span id="more"></span>
+
+<p>流程：</p>
+<p><img src="/2023/05/21/oauth-secure-issue-prevention/authorization_code.png" alt="authorization_code_flow"></p>
+<p>潜在的安全问题：</p>
+<p><strong>中间人攻击</strong></p>
+<p>攻击者通过劫持、伪造网络基站等方式监听了你的通信信息。如果使用了明文传输，那么很容易获取到你的账号密码。但是中间人攻击的方式对于 OAuth 来说，最多也只是能够获取到 Authorization code，看起来作用不太大。每个 code 被设计为具有时效性+只能使用一次，且只能搭配 app secret 使用, secret 一般只存在服务端。</p>
+<p><strong>重新拼接<code>authorization URL</code>，替换回调地址</strong></p>
+<p>如果开发者没有在 OAuth Provider Center 去设置精确的回调地址，比如使用<code>*</code>或者<code>http://</code>，那就容易因为被替换回调地址而泄露了 <code>authorization code</code>,攻击者在拿到 authorization code 之后，再获取你的 app key（公开的） 和 app select 就可以去替换 token 了。所以也要避免自己的 app secret 泄露，因此一般 app secret 都存储在服务端，换取 token 的流程也应该在 app 的服务端进行，而不在前端。</p>
+<p>防范措施：</p>
+<ul>
+<li>redirect URL 应该做精确比配校验</li>
+<li>不暴露(使用) app secret，比如使用 PKCE</li>
+</ul>
+<p><strong><em>PKCE 是为了防止 authorization code 泄露而设计的</em></strong><br>以下是使用 PKCE 增强安全性的步骤</p>
+<ol>
+<li><p>创建随机的 Code Verifier：客户端生成一个随机的 Code Verifier。Code Verifier 是一个随机的、高熵的字符串，可以使用 Base64 URL 编码。</p>
+</li>
+<li><p>计算 Code Challenge：客户端使用 SHA256 哈希算法计算 Code Verifier 的哈希值，并对哈希值进行 Base64 URL 编码，生成 Code Challenge。</p>
+</li>
+<li><p>发起授权请求：在授权请求中，客户端将 Code Challenge 和相应的哈希算法（通常为”code_challenge_method&#x3D;S256”）发送给授权服务器。</p>
+</li>
+<li><p>授权服务器验证：授权服务器接收到授权请求后，将 Code Challenge 进行验证。如果验证通过，它将返回授权码给客户端。</p>
+</li>
+<li><p>交换授权码：客户端使用授权码和原始的 Code Verifier 来交换访问令牌。授权服务器会验证 Code Verifier 是否与之前发送的 Code Challenge 匹配。只有匹配的情况下，才会返回访问令牌。</p>
+</li>
+</ol>
+<h2 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h2><p>流程图来自：<a target="_blank" rel="noopener" href="https://juejin.cn/post/6844903880896020488">https://juejin.cn/post/6844903880896020488</a></p>
+
+                                      
+                            </div>
+                          </div>
+                          <div class="article-footer">
+
+                          </div>
+</article>
+        
+            <div id="gitalk-container" class="card"></div>
+            
+</div>
+    </main>
+    <div class="footer">
+  <div class="copy">
+    &copy;
+      2023 君の名は。|
+        によって作成されたテーマ<a href="https://github.com/JackZong" target="_blank" title="Theme created by @J.zong">@J.zong</a>
+  </div>
+  <div class="hexo">
+    <span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+  </div>
+  <div class="hexo" title="Powered by Hexo">
+    搭載 <a href="http://hexo.io/" target="_blank">Hexo</a> | <a href="javascript:void(0);" id="bgToggle"> 背景画像 </a>
+  </div>
+</div>
+
+<script>
+  window.onload = function () {
+    const withBg = localStorage.getItem('withBg');
+    if (withBg === 'true') {
+      document.body.classList.add('with-bg');
+      document.getElementById('bgToggle').classList.add('active');
+    }
+
+    document.getElementById('bgToggle').addEventListener('click', function (e) {
+      e.preventDefault();
+      const withBg = localStorage.getItem('withBg');
+      if (withBg === 'true') {
+        localStorage.setItem('withBg', 'false');
+        document.body.classList.remove('with-bg');
+        document.getElementById('bgToggle').classList.remove('active');
+      } else {
+        localStorage.setItem('withBg', 'true');
+        document.body.classList.add('with-bg');
+        document.getElementById('bgToggle').classList.add('active');
+      }
+    })
+  }
+</script>
+
+
+  <script src="/plugins/highlight/highlight.pack.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  
+
+    
+      <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+      
+        </body>
+
+        </html>
+</body>
+</html>

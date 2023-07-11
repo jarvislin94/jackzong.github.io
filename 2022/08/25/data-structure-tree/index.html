@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>
+    君の名は
+  </title>
+  <link rel="icon" href="/imgs/favicon.ico">
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  <link rel="stylesheet" href="/plugins/highlight/styles/atom-one-dark.css">
+  <!-- Gitalk -->
+  
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+    <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+    <script>
+      window.addEventListener('load', () => {
+        const gitalkContainer = document.getElementById('gitalk-container');
+        if (!gitalkContainer) return;
+        const gitalk = new Gitalk({
+          clientID: 'c9f73c62f3102ab718ca',
+          clientSecret: 'baaae04e80a7772584de07c3c343d48a7d2670da',
+          repo: 'jackzong.github.io',      // The repository of store comments '
+          owner: 'JackZong',
+          admin: ['JackZong'],
+          id: location.pathname,      // Ensure uniqueness and length less than 50
+          distractionFreeMode: false  // Facebook-like distraction free mode
+        })
+        gitalk.render('gitalk-container');
+      })
+    </script>
+    
+<meta name="generator" content="Hexo 6.3.0"></head>
+<body>
+    <nav>
+  <div class="nav-item logo">
+    <a href="/">
+      <button class="btn btn-hover">
+        <span>
+          君の名は
+        </span>
+      </button>
+    </a>
+  </div>
+  
+    <div class="nav-item"><a href="/">
+        主页
+      </a></div>
+    
+    <div class="nav-item"><a href="/archives">
+        时间轴
+      </a></div>
+    
+    <div class="nav-item"><a href="/tags">
+        标签
+      </a></div>
+    
+    <div class="nav-item"><a href="/about">
+        关于
+      </a></div>
+    
+</nav>
+    <main>
+        <div class="post">
+    <article class="card post-article">
+  
+              
+                  <h3 class="article-title-detail"><span>
+                      重学数据结构与算法-树
+                    </span></h3>
+                  <div class="posted-on-detail">『22年08月25日』</div>
+                  
+                    
+                      <div class="article-top-meta">
+                        
+                      </div>
+                      
+
+                          <div class="article-content">
+                            <div class="entry">
+                              
+                                    <p><img src="/2022/08/25/data-structure-tree/brand.jpeg" alt="&#39;brand&#39;"><br>图：园南小学</p>
+<blockquote>
+<p>如果要系统的学习某个知识的话，我感觉选择相关知识的一本经典书籍来阅读是一个很好的选择。</p>
+</blockquote>
+<p>因为书本：</p>
+<ul>
+<li>系统性</li>
+<li>具有较强的权威性（发现一个百万粉丝的计算机博主，习惯把树的高度定义为根节点到最远叶子的节点数，这样算出来的高度就总会比书本上的多一层，这样可能就会让人感到疑惑）</li>
+</ul>
+<p>《数据结构》与《算法》是CS专业最为重要的两门课，特别是对于从事软件开发的同学，也是面试中作为基础知识的最重要的考查点。</p>
+<p>这次重新学习数据结构与算法，我主要选了两本书籍作为指南 -<a target="_blank" rel="noopener" href="https://github.com/loiane/javascript-datastructures-algorithms">《学习Javascript数据结构与算法》</a>和《算法导论》，记得大学的时候，我们的数据结构课本是学校的自编教材，质量实在一般，我也就不太爱看:(。其中《学习Javascript数据结构与算法》主要是用Js代码将主要的数据结构以及操作实现了一遍，整体简洁干练，其中也不乏深度和广度，而且很多定义我都在维基百科或教科书上查询过，我认为是比较权威的，挺适合前端人员想学习数据结构的同学。《算法导论》则是很深入讲解算法理论知识的一本经典书籍，里面有大量的数学论证，数学不好的同学可能会看得很吃力，比如说我😫。我是配合b站的书籍作者Charles教授的MIT公开课来学习的，也没有太多的深入。不过如果你能完全搞懂，相信能超越90%程序员，。。</p>
+<p>来自知乎的热门话题 - <a target="_blank" rel="noopener" href="https://www.zhihu.com/question/315201616/answer/1756148937">为什么有人说弄懂了《算法导论》的 90%，就超越了 90%的程序员？</a></p>
+<span id="more"></span>
+<p><img src="/2022/08/25/data-structure-tree/tree.jpeg" alt="&#39;tree&#39;"><br>图：树在数据结构中的“地位”</p>
+<p>树都是用的链表的形式来组织，所以属于线性表中的链式存储结构，区别于用数组组织的顺序存储结构。而二叉树是最常见的一种树的类型。</p>
+<h4 id="以下是二叉树的定义"><a href="#以下是二叉树的定义" class="headerlink" title="以下是二叉树的定义"></a><a href="#%E4%BB%A5%E4%B8%8B%E6%98%AF%E4%BA%8C%E5%8F%89%E6%A0%91%E7%9A%84%E5%AE%9A%E4%B9%89" title="以下是二叉树的定义"></a>以下是二叉树的定义</h4><p><em>“二叉树中的节点最多只能有两个子节点，一个是左侧子节点，另一个是右侧子节点”</em></p>
+<p>而二叉树中又有两种常见的分类 - Binary Search Tree（二叉搜索树）和 Adelson-Velskii-Landi Tree（自平衡二叉搜索树）。</p>
+<h4 id="BST"><a href="#BST" class="headerlink" title="BST:"></a><a href="#BST" title="BST:"></a>BST:</h4><p><em>BST是二叉树的一种，但是只允许在左侧节点存储比父节点小的值，在右侧节点存储比父节点大的值。</em></p>
+<p>以下我们来详细的实现下BST，</p>
+<h4 id="BST的常见操作："><a href="#BST的常见操作：" class="headerlink" title="BST的常见操作："></a><a href="#BST%E7%9A%84%E5%B8%B8%E8%A7%81%E6%93%8D%E4%BD%9C%EF%BC%9A" title="BST的常见操作："></a>BST的常见操作：</h4><ul>
+<li>中序遍历（先依次访问左节点，再访问根节点，最后访问右节点，遍历完成后，根节点位于左子树节点与右子树节点中间。）</li>
+<li>先序遍历（根节点位于左右子树节点之前，先访问父节点后访问左、右子节点）</li>
+<li>后序遍历（根节点位于左右子树节点之后,先访问左、右子节点后访问父节点）</li>
+<li>插入</li>
+<li>删除某个键</li>
+<li>搜索</li>
+<li>返回最大&#x2F;最小键</li>
+</ul>
+<h4 id="数据结构"><a href="#数据结构" class="headerlink" title="数据结构"></a><a href="#%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84" title="数据结构"></a>数据结构</h4><p>怎么用JS定义Tree的数据结构？</p>
+<ol>
+<li><p>先定义Tree的每个节点，都包含 - 键（树中习惯叫键，不同于链表的值），左子树、右子树的引用。</p>
+<pre><code class='javascript'>
+    class Node &#123;
+        constructor(val) &#123;
+            this.val = val;
+            this.left = null;
+            this.right = null;
+        &#125;
+    &#125;
+</code></pre></li>
+</ol>
+<p>树节点的实现跟双向链表的实现很像，只是把 <code>this.prev</code> and <code>this.next</code> 换成了<code>this.left</code> and <code>this.right</code>.</p>
+<ol start="2">
+<li><p>定义一棵二叉树，它应该包含 - 一个根节点，以及上面提到的常见操作方法，这里我们用Class来实现</p>
+<pre><code class='javascript'>
+    class BinarySearchTree &#123;
+        constructor() &#123;
+            this.root = null;
+        &#125;
+    &#125;
+</code></pre>
+</li>
+<li><p>实现插入操作</p>
+</li>
+</ol>
+<ul>
+<li>如果根不存在，则新插入节点直接作为根</li>
+<li>否则，从根节点开始递归直到找到应该插入的位置   <pre><code class='javascript'>
+     // 向树插入一个新键
+  insert(key, currentNode = this.root) &#123;
+    if (!this.root) &#123;
+      this.root = new Node(key);
+    &#125; else &#123;
+      this.insertNode(key, this.root);
+    &#125;
+  &#125;
+
+    // 找到新节点应该插入的位置
+  insertNode(key, node) &#123;
+    if (this.compareFn(key, node.key) === CompareResult.LESS_THAN) &#123;
+      if (!node.left) &#123;
+        node.left = new Node(key);
+        return;
+      &#125; else &#123;
+        this.insertNode(key, node.left);
+      &#125;
+    &#125; else &#123;
+      if (!node.right) &#123;
+        node.right = new Node(key);
+        return;
+      &#125; else &#123;
+        this.insertNode(key, node.right);
+      &#125;
+    &#125;
+  &#125;</li>
+</ul>
+<p>   </code></pre>     </p>
+<ol start="4">
+<li><p>中序遍历</p>
+<pre><code class='javascript'>
+// 中序遍历 - 根节点位于左子树节点与右子树节点中间，先访问左节点，再访问根节点，最后访问右节点
+  inorderTreeWalk() &#123;
+    this.inorderNode(this.root);
+  &#125;
+  inorderNode(node) &#123;
+    if (node !== null) &#123;
+      this.inorderNode(node.left);
+      console.log(node.key);
+      this.inorderNode(node.right);
+    &#125;
+    return undefined;
+  &#125;
+
+</code></pre>
+
+
+</li>
+<li><p>先序遍历</p>
+<pre><code class='javascript'>
+    // 先序遍历 - 根节点位于左右子树节点之前，先访问父节点后访问左、右子节点
+  preorderTreeWalk() &#123;
+    this.preorderNode(this.root);
+  &#125;
+
+  preorderNode(node) &#123;
+    if (node !== null) &#123;
+      console.log(node.key);
+      this.preorderNode(node.left);
+      this.preorderNode(node.right);
+    &#125;
+    return undefined;
+  &#125;
+</code></pre>
+
+
+
+</li>
+<li><p>后序遍历</p>
+<pre><code class='javascript'>
+  // 后序遍历 - 根节点位于左右子树节点之后,先访问左、右子节点后访问父节点
+  postorderTreeWalk() &#123;
+    this.postorderNode(this.root);
+  &#125;
+
+  postorderNode(node) &#123;
+    if (node !== null) &#123;
+      this.postorderNode(node.left);
+      this.postorderNode(node.right);
+      console.log(node.key);
+    &#125;
+    return;
+  &#125;</li>
+</ol>
+<p></code></pre></p>
+<ol start="7">
+<li>删除某个节点</li>
+</ol>
+<ul>
+<li><p>先递归找到要删除的节点</p>
+</li>
+<li><p>若节点没有左右子树（叶节点），则可以直接删除</p>
+</li>
+<li><p>若节点仅有一棵子树，则删除当前节点并将子树上移</p>
+</li>
+<li><p>若节点有左右子树，则找到右子树的最小值来替代要当前节点（或左子树的最大值），然后再删除右子树中的最小值</p>
+<pre><code class='javascript'>
+   // 移除一个节点
+  remove(key) &#123;
+    return this.removeNode(key, this.root);
+  &#125;
+
+  removeNode(key, current) &#123;
+    if (this.compareFn(key, current.key) === CompareResult.LESS_THAN) &#123;
+      current.left = this.removeNode(key, current.left);
+      return current;
+    &#125; else if (
+      this.compareFn(key, current.key) === CompareResult.GREATER_THAN
+    ) &#123;
+      current.right = this.removeNode(key, current.right);
+      return current;
+    &#125; else &#123;
+      // 没有子树，则直接删除
+      if (!current.left && !current.right) &#123;
+        current = null;
+        return current;
+      &#125;
+     // 只有一棵子树，子树上移
+      if (!current.left) &#123;
+        current = current.right;
+        return current;
+      &#125; else if (!current.right) &#123;
+        current = current.left;
+        return current;
+      &#125;
+     // 左右子树都有的情况
+      const minNode = this.minNode(current.right);
+      current.key = minNode.key;
+      current.right = this.removeNode(minNode.key, current.right);
+      return current;
+    &#125;
+  &#125;
+
+</code></pre></li>
+</ul>
+<p>…<br>其它操作方法的实现，可以参考我的codepen</p>
+<p class="codepen" data-height="300" data-default-tab="js" data-slug-hash="XWEOLBG" data-user="jackzong" style="height: 300px; box-sizing: border-box; display: flex; align-items: center; justify-content: center; border: 2px solid; margin: 1em 0; padding: 1em;">
+  <span>See the Pen <a target="_blank" rel="noopener" href="https://codepen.io/jackzong/pen/XWEOLBG">
+  BST</a> by JinZhang (<a target="_blank" rel="noopener" href="https://codepen.io/jackzong">@jackzong</a>)
+  on <a target="_blank" rel="noopener" href="https://codepen.io">CodePen</a>.</span>
+</p>
+<script async src="https://cpwebassets.codepen.io/assets/embed/ei.js"></script>
+
+<h4 id="二叉树在计算机科学中的应用"><a href="#二叉树在计算机科学中的应用" class="headerlink" title="二叉树在计算机科学中的应用"></a><a href="#%E4%BA%8C%E5%8F%89%E6%A0%91%E5%9C%A8%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8" title="二叉树在计算机科学中的应用"></a>二叉树在计算机科学中的应用</h4><ul>
+<li>利用中序遍历对一组数进行排序</li>
+<li>待定。。。</li>
+</ul>
+<h4 id="其它知识点"><a href="#其它知识点" class="headerlink" title="其它知识点"></a><a href="#%E5%85%B6%E5%AE%83%E7%9F%A5%E8%AF%86%E7%82%B9" title="其它知识点"></a>其它知识点</h4><ul>
+<li>树的顶部节点 - 根节点</li>
+<li>没有子元素的节点 - 叶节点</li>
+<li>树的最小键存在于左子树的最左端点</li>
+<li>树的最大键存在于右子树的最右端点</li>
+<li>树的节点有个属性叫深度，其值是所有祖先节点的数量</li>
+<li>树的高度：<ul>
+<li>根节点到最远叶子节点的最长路径上的边数（这是教科书上比较标准的定义，LeetCode上习惯定义为：根节点到最远叶子节点的最长路径上的节点数，所以LeetCode的树都会多一层:)；</li>
+<li>或者可以用分层理论去看一棵树的高度，根节点处于第一层，叶节点处于最后一层，层数即为树的高度；</li>
+</ul>
+</li>
+</ul>
+
+                                      
+                            </div>
+                          </div>
+                          <div class="article-footer">
+
+                          </div>
+</article>
+        
+            <div id="gitalk-container" class="card"></div>
+            
+</div>
+    </main>
+    <div class="footer">
+  <div class="copy">
+    &copy;
+      2023 君の名は。|
+        によって作成されたテーマ<a href="https://github.com/JackZong" target="_blank" title="Theme created by @J.zong">@J.zong</a>
+  </div>
+  <div class="hexo">
+    <span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+  </div>
+  <div class="hexo" title="Powered by Hexo">
+    搭載 <a href="http://hexo.io/" target="_blank">Hexo</a> | <a href="javascript:void(0);" id="bgToggle"> 背景画像 </a>
+  </div>
+</div>
+
+<script>
+  window.onload = function () {
+    const withBg = localStorage.getItem('withBg');
+    if (withBg === 'true') {
+      document.body.classList.add('with-bg');
+      document.getElementById('bgToggle').classList.add('active');
+    }
+
+    document.getElementById('bgToggle').addEventListener('click', function (e) {
+      e.preventDefault();
+      const withBg = localStorage.getItem('withBg');
+      if (withBg === 'true') {
+        localStorage.setItem('withBg', 'false');
+        document.body.classList.remove('with-bg');
+        document.getElementById('bgToggle').classList.remove('active');
+      } else {
+        localStorage.setItem('withBg', 'true');
+        document.body.classList.add('with-bg');
+        document.getElementById('bgToggle').classList.add('active');
+      }
+    })
+  }
+</script>
+
+
+  <script src="/plugins/highlight/highlight.pack.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  
+
+    
+      <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+      
+        </body>
+
+        </html>
+</body>
+</html>

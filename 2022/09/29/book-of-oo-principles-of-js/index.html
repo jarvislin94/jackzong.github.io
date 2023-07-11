@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>
+    君の名は
+  </title>
+  <link rel="icon" href="/imgs/favicon.ico">
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  <link rel="stylesheet" href="/plugins/highlight/styles/atom-one-dark.css">
+  <!-- Gitalk -->
+  
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+    <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+    <script>
+      window.addEventListener('load', () => {
+        const gitalkContainer = document.getElementById('gitalk-container');
+        if (!gitalkContainer) return;
+        const gitalk = new Gitalk({
+          clientID: 'c9f73c62f3102ab718ca',
+          clientSecret: 'baaae04e80a7772584de07c3c343d48a7d2670da',
+          repo: 'jackzong.github.io',      // The repository of store comments '
+          owner: 'JackZong',
+          admin: ['JackZong'],
+          id: location.pathname,      // Ensure uniqueness and length less than 50
+          distractionFreeMode: false  // Facebook-like distraction free mode
+        })
+        gitalk.render('gitalk-container');
+      })
+    </script>
+    
+<meta name="generator" content="Hexo 6.3.0"></head>
+<body>
+    <nav>
+  <div class="nav-item logo">
+    <a href="/">
+      <button class="btn btn-hover">
+        <span>
+          君の名は
+        </span>
+      </button>
+    </a>
+  </div>
+  
+    <div class="nav-item"><a href="/">
+        主页
+      </a></div>
+    
+    <div class="nav-item"><a href="/archives">
+        时间轴
+      </a></div>
+    
+    <div class="nav-item"><a href="/tags">
+        标签
+      </a></div>
+    
+    <div class="nav-item"><a href="/about">
+        关于
+      </a></div>
+    
+</nav>
+    <main>
+        <div class="post">
+    <article class="card post-article">
+  
+              
+                  <h3 class="article-title-detail"><span>
+                      读书摘要 -《JavaScript 面向对象精要》
+                    </span></h3>
+                  <div class="posted-on-detail">『22年09月29日』</div>
+                  
+                    
+                      <div class="article-top-meta">
+                        
+                      </div>
+                      
+
+                          <div class="article-content">
+                            <div class="entry">
+                              
+                                    <p><img src="/2022/09/29/book-of-oo-principles-of-js/banner.jpeg" alt="banner"><br>图：书本封面</p>
+<p>分享最近读的一本书 -《JavaScript 面向对象精要》，作者是尼古拉斯（Nicholas C. Zakas），著名的 JavaScript 开发者。你可能会因为他的另外一本书而熟悉-《JavaScript 高级程序设计》，熟称红宝书。作者文笔干练，每次都能用简洁、优雅的语言直击核心要点，另读者心领神会，就像这本书一样，短短 90 页内容，却贯穿了整个 JavaScript 最核心的部分。</p>
+<span id="more"></span>
+
+<p>这本书主要讲了，“如何在没有类概念的 JavaScript 中实现面向对象编程”，因为这本书的写作背景是在 2013 年，那时 JS 版本处于 ES5 阶段，还没有类的概念，书本的目标是指在帮助那些习惯使用带有类概念编程语言如 Java，C#的开发者快速上手 JS，同时也说明了 JS 是一门非常灵活的语言。</p>
+<p>本书共有六个章节：</p>
+<ol>
+<li>原始类型和引用类型</li>
+<li>函数</li>
+<li>理解对象</li>
+<li>构造函数和原型对象</li>
+<li>继承</li>
+<li>对象模式</li>
+</ol>
+<h3 id="原始类型和引用类型"><a href="#原始类型和引用类型" class="headerlink" title="原始类型和引用类型"></a>原始类型和引用类型</h3><p>这章讲了 JS 的数据类型分为两类 - 原始类型和引用类型。<br>两者的区别：</p>
+<table>
+<thead>
+<tr>
+<th align="center"></th>
+<th align="left">原始类型</th>
+<th align="left">引用类型</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">存储方式</td>
+<td align="left">直接存储</td>
+<td align="left">只存储指针</td>
+</tr>
+<tr>
+<td align="center">鉴别方法</td>
+<td align="left">typeof + “&#x3D;&#x3D;&#x3D;null”</td>
+<td align="left">typeof function + instanceof</td>
+</tr>
+</tbody></table>
+<p>另外，每个页面有自己的全局上下文-Array、Object 以及其他内建类型的版本，当你把一个数组从一个框架传到另一个框架的时候，instanceof 不能正常识别，因为那个数组是来自不同框架的 array 的实例，可以用 Array.isArray 解决这个问题</p>
+<h3 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h3><p>函数在 JS 中是一等公民，因为它本质上也是一个对象，所以可以被当作对象使用，也可赋值给变量，也可作为函数的参数，或者作为函数的返回值，威力无穷大。</p>
+<p>概要：</p>
+<ul>
+<li>函数也是对象，和其它对象的区别就是内部具有[[Call]]属性</li>
+<li>使用 typeof 操作符鉴别函数的时候，会检查是否具有内部属性[[Call]],如果找到，则返回”function”</li>
+<li>函数声明会被提升到上下文的顶部，而函数表达式不会</li>
+<li>length 属性保存了期望的参数数量</li>
+<li>函数重载的概念是一个函数可以具有多个签名，也就是可以声明多个同名函数，只是他们的参数数量，参数类型不同，然后调用的时候语言会自动根据提供的参数数量，参数类型调用相应的函数。由于 JS 同名函数会被覆盖，所以也就不能实现多个签名，也就没有重载的概念，JS 可以在函数内部通过判断参数的数量来实现伪重载。</li>
+<li>所有的函数作用域内都有一个 this 对象代表调用该函数的对象</li>
+<li>可以使用 this 对象来解耦合</li>
+</ul>
+<h3 id="理解对象"><a href="#理解对象" class="headerlink" title="理解对象"></a>理解对象</h3><p>基于类的语言会根据类的定义锁定对象，JavaScript 的对象则没有这种限制，它是动态的，可在代码执行的任意时刻进行改变。</p>
+<p>概要：</p>
+<ul>
+<li><p>创建对象属性的时候，实际上会调用对象的内部属性[[Put]]，修改的时候调用[[Set]]，删除调用[[Delete]]</p>
+</li>
+<li><p>由于使用 <code>if(obj.property)&#123;//do something&#125;</code> 判断属性是否存在的时候，当值为 null,undefined,NaN,false 或空字符串时评估为假，而对象的属性可能包含这些值，所以使用 in 操作符来判断属性是否存在更加靠谱。<br>in 操作符会检查实例属性和原型属性，可以配合 hasOwnProperty 来检查是否时自有属性</p>
+</li>
+<li><p>for-in 和 Object.keys 都可以用来遍历对象的可枚举属性，后者只会在实例上遍历</p>
+</li>
+<li><p>Object.getOwnPropertyNames 可以用来获取对象的所有自身属性的属性名，包括不可枚举属性</p>
+</li>
+</ul>
+<ul>
+<li>对象的属性有两种类型，数据属性和访问器属性<br>两者的一些区别：</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th align="center"></th>
+<th align="left">数据属性</th>
+<th align="left">访问器属性</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">存储</td>
+<td align="left">可以直接保存值</td>
+<td align="left">只定义 getter 和 setter 的行为</td>
+</tr>
+<tr>
+<td align="center">属性特征</td>
+<td align="left">[[Enumerable]] [[Configurable]] [[Writable]] [[Value]]</td>
+<td align="left">[[Enumerable]] [[Configurable]] [[Get]] [[Set]]</td>
+</tr>
+</tbody></table>
+<p>因为这些不同的特性，区别开了数据属性和防问器属性的工作模式</p>
+<ul>
+<li>可以用 Object.defineProperty 或 Object.defineProperties 来更改属性的特性</li>
+<li>可以用 Object.getOwnPropertyDescriptor()获取属性特性</li>
+</ul>
+<p>对象和属性一样具有指导其行为的内部特征，其中，用[[Extensible]]来表示对象是否可以被修改，默认是可扩展的，也就是可以添加新属性。</p>
+<p>禁止修改对象的一些方法：</p>
+<ul>
+<li>禁止扩展。使用 Object.preventExtensions()创建不可扩展的对象</li>
+<li>对象封印。使用 Object.seal() 创建的对象其[[Extensible]][[Configurable]]都为 false</li>
+<li>对象冻结。使用 Object.freeze() 创建的对象，其数据属性都为只读[[Extensible]][[Configurable]][[Writable]]都为 false</li>
+</ul>
+<p>应在严格模式下使用冻结对象，这样修改就会报错</p>
+<h3 id="继承"><a href="#继承" class="headerlink" title="继承"></a>继承</h3><p>Object.create 可以用来创建一个对象并为其指定[[Prototype]]的值</p>
+<p>创建一个对象字面量的时候，会自动去继承 Object.Prototype</p>
+<pre><code class='javascript'>
+  const obj = &#123; title: 'hi~'&#125;;
+  // auto done by engine
+  Object.create(Object.prototype,&#123; title: &#123;
+    value: 'hi~',
+    configurable:true,
+    enumerable:true,
+    writable:true,
+  &#125;&#125;)
+
+</code></pre>
+
+<p>这章讲了 JS 实现继承的几种办法：</p>
+<p><strong>对象继承</strong>：因为当访问对象属性时，会有原型链查找机制，所以可以利用 Object.create 来指定[[Prototype]]的值，从而实现继承</p>
+<p><strong>原型对象链继承</strong>：定义在原型对象（x.Prototype）上的属性和方法会被其实例共享</p>
+<p><strong>构造函数继承</strong>：改写子类的 prototype，令其[[Prototype]]属性指向父类的原型对象，从而实现原型链继承；<br>有以下两种实现方式：</p>
+<pre><code>1. ChildClass.prototype = new ParentClass(); ChildClass.prototype.constructor = ChildClass;
+2. ChildClass.prototype = Object.create(ParentClass.prototype,&#123;constructor: &#123; value:ChildClass &#125;&#125;)
+</code></pre>
+<p><strong>构造函数窃取</strong>：利用 call,apply 方法在子类中调用父类构造函数从而继承到父类的自有属性，再通过修改子类 prototype 中的[[Prototype]]属性指向父类的 prototype 来实现继承父类原型对象上的方法，这也叫伪类继承</p>
+<p><strong>混入</strong>：不改变原型对象链，而是直接复制另一对象的属性，如果对象的属性也是一个对象，那就是浅拷贝</p>
+<p>另外，JS 不提供 super 来调用父类的方法（ES5），可以用 call，apply 代替<br>如：</p>
+<pre><code class='javascript'>
+  ParentClass.prototype.sayName.call(childClassThis);
+</code></pre>
+
+<h3 id="对象模式"><a href="#对象模式" class="headerlink" title="对象模式"></a>对象模式</h3><p><strong>私有成员和特权成员</strong> 也就是怎么实现 OO 中的 private。JavaScript 对象的所有属性都是公开的，可以用下面两种方式实现私有属性：</p>
+<ol>
+<li><p>模块模式</p>
+<p>利用 IIFE 产生一个可以访问一个已销毁函数作用域的闭包,然后在返回的闭包里包含访问私有成员的“特权方法”。比如，</p>
+ <pre><code class='javascript'>
+   const obj = (function()&#123;
+     let age = 18;
+     return &#123;
+       getAge() &#123; return age; &#125;, 
+       setAge(val) &#123; age = val; &#125;
+     &#125;
+   &#125;())
+ </code></pre>
+</li>
+<li><p>构造函数的私有成员</p>
+<p>在构造函数中使用本地变量，然后暴露更改变量的接口函数。比如，</p>
+<pre><code class='javascript'>
+  function Person() &#123;
+    let age = 18;
+    this.getAge = function() &#123;
+      return age;
+    &#125;
+    this.setAge = function(val) &#123;
+      age = val;
+    &#125;
+  &#125;
+</code></pre></li>
+</ol>
+<p><strong>作用域安全的构造函数</strong>当你没有使用 new 操作符去调用的时候，会在内部自己添加 new。比如，内置的 Array，Object，RegExp 和 Error</p>
+<pre><code class='javascript'>
+
+function Person(name)&#123;
+  if(this instanceof Person) &#123;
+    // called with new
+    this.name = name;
+  &#125; else &#123;
+    // called without new
+    return new Person(name);
+  &#125;
+&#125;
+
+</code></pre>
+
+<p>以上，尼古拉斯使用 JS 实现了 OOP 中类的：封装，聚合，继承和多态的特性。</p>
+
+                                      
+                            </div>
+                          </div>
+                          <div class="article-footer">
+
+                          </div>
+</article>
+        
+            <div id="gitalk-container" class="card"></div>
+            
+</div>
+    </main>
+    <div class="footer">
+  <div class="copy">
+    &copy;
+      2023 君の名は。|
+        によって作成されたテーマ<a href="https://github.com/JackZong" target="_blank" title="Theme created by @J.zong">@J.zong</a>
+  </div>
+  <div class="hexo">
+    <span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+  </div>
+  <div class="hexo" title="Powered by Hexo">
+    搭載 <a href="http://hexo.io/" target="_blank">Hexo</a> | <a href="javascript:void(0);" id="bgToggle"> 背景画像 </a>
+  </div>
+</div>
+
+<script>
+  window.onload = function () {
+    const withBg = localStorage.getItem('withBg');
+    if (withBg === 'true') {
+      document.body.classList.add('with-bg');
+      document.getElementById('bgToggle').classList.add('active');
+    }
+
+    document.getElementById('bgToggle').addEventListener('click', function (e) {
+      e.preventDefault();
+      const withBg = localStorage.getItem('withBg');
+      if (withBg === 'true') {
+        localStorage.setItem('withBg', 'false');
+        document.body.classList.remove('with-bg');
+        document.getElementById('bgToggle').classList.remove('active');
+      } else {
+        localStorage.setItem('withBg', 'true');
+        document.body.classList.add('with-bg');
+        document.getElementById('bgToggle').classList.add('active');
+      }
+    })
+  }
+</script>
+
+
+  <script src="/plugins/highlight/highlight.pack.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  
+
+    
+      <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+      
+        </body>
+
+        </html>
+</body>
+</html>

@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>
+    君の名は
+  </title>
+  <link rel="icon" href="/imgs/favicon.ico">
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  <link rel="stylesheet" href="/plugins/highlight/styles/atom-one-dark.css">
+  <!-- Gitalk -->
+  
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+    <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+    <script>
+      window.addEventListener('load', () => {
+        const gitalkContainer = document.getElementById('gitalk-container');
+        if (!gitalkContainer) return;
+        const gitalk = new Gitalk({
+          clientID: 'c9f73c62f3102ab718ca',
+          clientSecret: 'baaae04e80a7772584de07c3c343d48a7d2670da',
+          repo: 'jackzong.github.io',      // The repository of store comments '
+          owner: 'JackZong',
+          admin: ['JackZong'],
+          id: location.pathname,      // Ensure uniqueness and length less than 50
+          distractionFreeMode: false  // Facebook-like distraction free mode
+        })
+        gitalk.render('gitalk-container');
+      })
+    </script>
+    
+<meta name="generator" content="Hexo 6.3.0"></head>
+<body>
+    <nav>
+  <div class="nav-item logo">
+    <a href="/">
+      <button class="btn btn-hover">
+        <span>
+          君の名は
+        </span>
+      </button>
+    </a>
+  </div>
+  
+    <div class="nav-item"><a href="/">
+        主页
+      </a></div>
+    
+    <div class="nav-item"><a href="/archives">
+        时间轴
+      </a></div>
+    
+    <div class="nav-item"><a href="/tags">
+        标签
+      </a></div>
+    
+    <div class="nav-item"><a href="/about">
+        关于
+      </a></div>
+    
+</nav>
+    <main>
+        <div class="post">
+    <article class="card post-article">
+  
+              
+                  <h3 class="article-title-detail"><span>
+                      团检报告生成方案遇到的一些问题
+                    </span></h3>
+                  <div class="posted-on-detail">『23年02月19日』</div>
+                  
+                    
+                      <div class="article-top-meta">
+                        
+                      </div>
+                      
+
+                          <div class="article-content">
+                            <div class="entry">
+                              
+                                    <p>之前做了一套团检报告生成方案 - <a href="./html-2-pdf.md">上篇博文</a>。期间有遇到一些问题，今天有空归纳总结了一下，整套方案的运行效果还是很理想的，当然我们的业务访问量其实不大，不然有可能会暴露出更多的问题，特别是 puppeteer 是很耗内存资源的，在访问量大的情况下，可能要去重点优化 puppeteer 的使用效率问题,但以现在公司的业务基本不用太担心这个问题。<span id="more"></span></p>
+<p><strong>问题 1: 团检报告的数据中中文字符会乱码</strong></p>
+<p>我在 node 起了一个 next app 服务，其中包含 <strong>&#x2F;pages&#x2F;*</strong> 下的页面资源和 <strong>&#x2F;api&#x2F;*</strong> 下的 接口资源。</p>
+<p>接口资源如下：</p>
+<ul>
+<li>POST &#x2F;api&#x2F;html2pdf</li>
+<li>GET &#x2F;api&#x2F;healthcheck</li>
+</ul>
+<p><code>/api/html2pdf</code> 用来生成将指定的 html 页面转成 PDF 文档，接收以下参数：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;url&quot;</span><span class="punctuation">:</span> <span class="string">&quot;https://www.baidu.com&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;fileName&quot;</span><span class="punctuation">:</span> <span class="string">&quot;百度首页pdf文档&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;extraHeaders&quot;</span><span class="punctuation">:</span> <span class="string">&quot;团检报告json stringify后的数据&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>页面资源如下：</p>
+<ul>
+<li>teamreport</li>
+</ul>
+<p>访问 <a target="_blank" rel="noopener" href="http://localhost/teamport">http://localhost/teamport</a> 会返回 Next SSR 的 html 文档,这是一份带有图表，表格，插图等的体检报告。其中报告里的数据通过在 puppeteer 的 setExtraHeader 取得<a target="_blank" rel="noopener" href="https://pptr.dev/api/puppeteer.page.setextrahttpheaders">page.setExtraHeader</a>，整体流程如下：</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1.</span> <span class="variable constant_">POST</span> /api/html2pdf</span><br><span class="line"></span><br><span class="line">body = &#123;</span><br><span class="line">  <span class="string">&quot;url&quot;</span>: <span class="string">&quot;https://www.baidu.com&quot;</span>,</span><br><span class="line">  <span class="string">&quot;fileName&quot;</span>: <span class="string">&quot;百度首页pdf文档&quot;</span>,</span><br><span class="line">  <span class="string">&quot;extraHeaders&quot;</span>: <span class="title class_">JSON</span>.<span class="title function_">stringify</span>(体检报告数据)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="number">2.</span> html2pdf接口收到请求后launch puppeteer并且打开一个新页面</span><br><span class="line"><span class="keyword">const</span> page =browser.<span class="title function_">newPage</span>();</span><br><span class="line"></span><br><span class="line"><span class="number">3.</span> 设置page的extraHeader</span><br><span class="line">page.<span class="title function_">setExtraHeaders</span>(&#123;<span class="attr">data</span>: extraHeaders&#125;);</span><br><span class="line"></span><br><span class="line"><span class="number">3.</span> 打开teamreport</span><br><span class="line">page.<span class="title function_">goTo</span>(<span class="string">&#x27;https://localhost:3000/teamreport&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="number">4.</span> 在团检报告中接收extraHeaders</span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">getServerSideProps</span>(<span class="params">req</span>) &#123;</span><br><span class="line">    <span class="keyword">const</span> &#123; data &#125; = req.<span class="property">header</span>;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">        <span class="attr">props</span>: data</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="title class_">App</span> = (data) &#123;</span><br><span class="line"></span><br><span class="line">   <span class="comment">// data是整份团检报告的json数据</span></span><br><span class="line">    <span class="keyword">return</span> (渲染体检报告);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>由于团检报告 json 数据中是会包含一些中文字符的，比如一些医学名称，例如高血压、高血脂等等。在 api<code>/html2pdf</code>拿到的 extraHeader 还是正常的 JSON.stringify 后的文本，中文也是正常显示。但是当整份数据需要通过 <code>page.setExtraHeaders</code> 的形式给到 puppeteer 打开的 page 时，在 page 拿到的数据中的中文会乱码，想必是 puppeteer 在 <code>page.setExtraHeaders</code> 的时候对特殊字符做了一些转译。</p>
+<p>解决方法：对 JSON.stringify 后的文本(extraHeaders)进行 再 encodeURI 处理，然后才 setExtraHeaders</p>
+<figure class="highlight ts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">encodeURI</span>(<span class="title class_">JSON</span>.<span class="title function_">stringify</span>(reportData));</span><br><span class="line"></span><br><span class="line"><span class="comment">// teamreport 页面</span></span><br><span class="line"><span class="keyword">const</span> text = <span class="built_in">decodeURI</span>(req.<span class="property">header</span>.<span class="property">extraHeaders</span>);</span><br><span class="line"><span class="title class_">JSON</span>.<span class="title function_">parse</span>(text);</span><br></pre></td></tr></table></figure>
+
+<p>这样就“消灭”了中文字符,在新打开的 page 里再通过 decodeURI 对 encode 的特殊字符进行解码,中文特殊字符就能正常通过 page header 的形式给到 page 了。但也因此产生了问题 2</p>
+<p><strong>问题 2:puppeteer.page.setExtraHeaders（）设置的 header 文本过长</strong><br>当体检报告的数据(&gt;10kb)过大的时候，有可能超过 HTTP header 的最大限制，而 HTTP header 支持的最大长度会根据 web 服务器不同而有不同的限制。项目中使用 encodeURI 去对中文字符进行转译也会额外增加 header 的长度。</p>
+<p>所以，使用 header 并不适合用来传输大量数据。</p>
+<p>解决方案 1:<br>使用 node 全局变量，页面渲染完后即销毁。</p>
+
+                                      
+                            </div>
+                          </div>
+                          <div class="article-footer">
+
+                          </div>
+</article>
+        
+            <div id="gitalk-container" class="card"></div>
+            
+</div>
+    </main>
+    <div class="footer">
+  <div class="copy">
+    &copy;
+      2023 君の名は。|
+        によって作成されたテーマ<a href="https://github.com/JackZong" target="_blank" title="Theme created by @J.zong">@J.zong</a>
+  </div>
+  <div class="hexo">
+    <span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+  </div>
+  <div class="hexo" title="Powered by Hexo">
+    搭載 <a href="http://hexo.io/" target="_blank">Hexo</a> | <a href="javascript:void(0);" id="bgToggle"> 背景画像 </a>
+  </div>
+</div>
+
+<script>
+  window.onload = function () {
+    const withBg = localStorage.getItem('withBg');
+    if (withBg === 'true') {
+      document.body.classList.add('with-bg');
+      document.getElementById('bgToggle').classList.add('active');
+    }
+
+    document.getElementById('bgToggle').addEventListener('click', function (e) {
+      e.preventDefault();
+      const withBg = localStorage.getItem('withBg');
+      if (withBg === 'true') {
+        localStorage.setItem('withBg', 'false');
+        document.body.classList.remove('with-bg');
+        document.getElementById('bgToggle').classList.remove('active');
+      } else {
+        localStorage.setItem('withBg', 'true');
+        document.body.classList.add('with-bg');
+        document.getElementById('bgToggle').classList.add('active');
+      }
+    })
+  }
+</script>
+
+
+  <script src="/plugins/highlight/highlight.pack.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  
+
+    
+      <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+      
+        </body>
+
+        </html>
+</body>
+</html>

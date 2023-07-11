@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>
+    君の名は
+  </title>
+  <link rel="icon" href="/imgs/favicon.ico">
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  <link rel="stylesheet" href="/plugins/highlight/styles/atom-one-dark.css">
+  <!-- Gitalk -->
+  
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+    <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+    <script>
+      window.addEventListener('load', () => {
+        const gitalkContainer = document.getElementById('gitalk-container');
+        if (!gitalkContainer) return;
+        const gitalk = new Gitalk({
+          clientID: 'c9f73c62f3102ab718ca',
+          clientSecret: 'baaae04e80a7772584de07c3c343d48a7d2670da',
+          repo: 'jackzong.github.io',      // The repository of store comments '
+          owner: 'JackZong',
+          admin: ['JackZong'],
+          id: location.pathname,      // Ensure uniqueness and length less than 50
+          distractionFreeMode: false  // Facebook-like distraction free mode
+        })
+        gitalk.render('gitalk-container');
+      })
+    </script>
+    
+<meta name="generator" content="Hexo 6.3.0"></head>
+<body>
+    <nav>
+  <div class="nav-item logo">
+    <a href="/">
+      <button class="btn btn-hover">
+        <span>
+          君の名は
+        </span>
+      </button>
+    </a>
+  </div>
+  
+    <div class="nav-item"><a href="/">
+        主页
+      </a></div>
+    
+    <div class="nav-item"><a href="/archives">
+        时间轴
+      </a></div>
+    
+    <div class="nav-item"><a href="/tags">
+        标签
+      </a></div>
+    
+    <div class="nav-item"><a href="/about">
+        关于
+      </a></div>
+    
+</nav>
+    <main>
+        <div class="post">
+    <article class="card post-article">
+  
+              
+                  <h3 class="article-title-detail"><span>
+                      最近工作的一些感想
+                    </span></h3>
+                  <div class="posted-on-detail">『23年03月28日』</div>
+                  
+                    
+                      <div class="article-top-meta">
+                        
+                      </div>
+                      
+
+                          <div class="article-content">
+                            <div class="entry">
+                              
+                                    <p>在新东家已经待了三个月有余，老实讲这并不是一个友好的工作环境，你们遇到的坑这里估计都有，我想这也是很多小团队普遍会存在的一些问题，这里不再细讲。</p>
+<p>工作是人生的一段段旅程，加入一家公司，离开，再加入另一家公司，每次选择或许充满着确定的喜悦，或许充满着不确定的忧愁，并不是每个人都能如愿爬到金字塔的顶尖。<span id="more"></span></p>
+<ul>
+<li><p>我们在做些什么<br>我们是一个民营医院的 IT 部门，前身是集团的信息中心，最后分化出来只做医疗相关的产品线，一直是内部的一些系统，如门诊系统，体检系统等等。现在，开始对外做一些企业健康管理系统</p>
+</li>
+<li><p>我们的产品类型<br>大部门产品都是中后台管理系统，Ant Design, 表单，图表等等。自己基于 React,Koa 封装了一个后台管理系统框架，用于快速生成一个带有基本功能的后台管理系统，如登录，页面资源管理，角色管理，数据字典等。</p>
+</li>
+<li><p>最近学到了什么</p>
+<ul>
+<li>前端 BFF 层。第一次在工作中接触到比较“传统的” BFF 设计，认定为“传统的”是因为它在做一些大家都在做的事情，接口代理、日志、充当网关、安全防止等。之前运用 node 去做一些 serverless 的开发，我认为是属于非“传统的”。而我们正在用 Koa 用这件事。<br>白色的截图：<br><img src="/2023/03/28/acbout-cvte-cir-framework/bff.png" alt="bff"></li>
+<li>讲到 Koa，便会提到了经典的洋葱模型，记得之前面试支付宝的时候，被问过不知道洋葱模型吗？😓 没做过 BFF 层的我确实是不知道，以下便是一个洋葱模型的简易实现。<br><img src="/2023/03/28/acbout-cvte-cir-framework/koa.png" alt="koa"></li>
+<li>ECharts 的使用，在做团检报告的时候比较“正经”的实践了一番</li>
+<li>Ant.Design 系列，包括 antdv4, pro-components, umi 等。涉及到了动态表单，ahooks,layout 等，开源的力量使我们能做出更好的产品。</li>
+<li>Mobx,浅浅的接触了 Mobx，还不是特别的熟悉</li>
+<li>Redis，node redis client 的存取</li>
+<li>Next.js, Tailwind.css。不得不说，Next.js 真的很好用</li>
+</ul>
+</li>
+</ul>
+<p>在一个创业类型的小团队里，老板们最想要的莫过于利用最小的成本产出最大的价值，这也是工程师在选择一个团队的时候需要着重考量的一个点，也是工程师最大的价值。</p>
+<p>但有一点还是要区分的，创业团队和打杂团队还是有区分的。 ：） 哈哈</p>
+<p>能够利用一些开源的技术去产出可靠的产品来实现业务功能，或者就是一个小团队程序员最大的价值。实现需求的方法有可能有几十种，能够在一些技术选型上做出好的选择，也是一个程序员能力的体现。</p>
+<p>晚安。</p>
+
+                                      
+                            </div>
+                          </div>
+                          <div class="article-footer">
+
+                          </div>
+</article>
+        
+            <div id="gitalk-container" class="card"></div>
+            
+</div>
+    </main>
+    <div class="footer">
+  <div class="copy">
+    &copy;
+      2023 君の名は。|
+        によって作成されたテーマ<a href="https://github.com/JackZong" target="_blank" title="Theme created by @J.zong">@J.zong</a>
+  </div>
+  <div class="hexo">
+    <span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+  </div>
+  <div class="hexo" title="Powered by Hexo">
+    搭載 <a href="http://hexo.io/" target="_blank">Hexo</a> | <a href="javascript:void(0);" id="bgToggle"> 背景画像 </a>
+  </div>
+</div>
+
+<script>
+  window.onload = function () {
+    const withBg = localStorage.getItem('withBg');
+    if (withBg === 'true') {
+      document.body.classList.add('with-bg');
+      document.getElementById('bgToggle').classList.add('active');
+    }
+
+    document.getElementById('bgToggle').addEventListener('click', function (e) {
+      e.preventDefault();
+      const withBg = localStorage.getItem('withBg');
+      if (withBg === 'true') {
+        localStorage.setItem('withBg', 'false');
+        document.body.classList.remove('with-bg');
+        document.getElementById('bgToggle').classList.remove('active');
+      } else {
+        localStorage.setItem('withBg', 'true');
+        document.body.classList.add('with-bg');
+        document.getElementById('bgToggle').classList.add('active');
+      }
+    })
+  }
+</script>
+
+
+  <script src="/plugins/highlight/highlight.pack.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  
+
+    
+      <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+      
+        </body>
+
+        </html>
+</body>
+</html>

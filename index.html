@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>
+    君の名は
+  </title>
+  <link rel="icon" href="/imgs/favicon.ico">
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  <link rel="stylesheet" href="/plugins/highlight/styles/atom-one-dark.css">
+  <!-- Gitalk -->
+  
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+    <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+    <script>
+      window.addEventListener('load', () => {
+        const gitalkContainer = document.getElementById('gitalk-container');
+        if (!gitalkContainer) return;
+        const gitalk = new Gitalk({
+          clientID: 'c9f73c62f3102ab718ca',
+          clientSecret: 'baaae04e80a7772584de07c3c343d48a7d2670da',
+          repo: 'jackzong.github.io',      // The repository of store comments '
+          owner: 'JackZong',
+          admin: ['JackZong'],
+          id: location.pathname,      // Ensure uniqueness and length less than 50
+          distractionFreeMode: false  // Facebook-like distraction free mode
+        })
+        gitalk.render('gitalk-container');
+      })
+    </script>
+    
+<meta name="generator" content="Hexo 6.3.0"></head>
+<body>
+    <nav>
+  <div class="nav-item logo">
+    <a href="/">
+      <button class="btn btn-hover">
+        <span>
+          君の名は
+        </span>
+      </button>
+    </a>
+  </div>
+  
+    <div class="nav-item"><a href="/">
+        主页
+      </a></div>
+    
+    <div class="nav-item"><a href="/archives">
+        时间轴
+      </a></div>
+    
+    <div class="nav-item"><a href="/tags">
+        标签
+      </a></div>
+    
+    <div class="nav-item"><a href="/about">
+        关于
+      </a></div>
+    
+</nav>
+    <main>
+        <div class="wrapper">
+    
+      
+        <article class="card ">
+  
+              
+                <div class="posted-on">『23年05月21日』</div>
+                <h3 class="article-title"><a href="/2023/05/21/oauth-secure-issue-prevention/"><span>
+                      使用OAuth实现统一登录的安全防范
+                    </span></a></h3>
+                
+                    
+                      <div class="article-top-meta">
+                        
+                      </div>
+                      
+
+                          <div class="article-content">
+                            <div class="entry">
+                              
+                                <p>当使用 OAuth2.0 去实现应用的统一登录验证时，会存在一些安全问题，值得开发者们思考与防范。特指 <code>authorization code</code> 模式。</p>
+<p>回顾一下<code>authorization code</code>授权登录的整个流程：</p>
+<ol>
+<li><p>到 <strong>OAuth Provider</strong> 注册一个应用，获取 app key(client ID) 和 app secret，并填写回调地址;</p>
+</li>
+<li><p>client 端引导用户打开统一登录页面，并携带<code>app key</code>。</p>
+</li>
+<li><p>用户登录完成后跳转到指定的<code>redirect_uri</code>，并返回<code>authorization code</code>。</p>
+<p>题外话：<em>implicit 模式貌似可在 step3 直接返回 token</em></p>
+</li>
+<li><p>第三方 app 服务端调用<code>OAuth Provider</code> 获取 token 的 API，通常是<code>/oauth/token</code>， 携带<code>authorization code</code>和<code>app key</code>、<code>app secret</code>去换取 token.</p>
+</li>
+<li><p>拿到 token 后就算登录成功了</p>
+</li>
+</ol>
+                                  <p class="read-more"> <a href="/2023/05/21/oauth-secure-issue-prevention/" title="read more">
+                                      阅读更多<a></p>
+                                  
+                            </div>
+                          </div>
+                          <div class="article-footer">
+
+                          </div>
+</article>
+       
+      
+      
+        <article class="card ">
+  
+              
+                <div class="posted-on">『23年04月25日』</div>
+                <h3 class="article-title"><a href="/2023/04/25/wechat-login/"><span>
+                      怎么实现微信扫码登录
+                    </span></a></h3>
+                
+                    
+                      <div class="article-top-meta">
+                        
+                          
+                            <a href="/tags/技术点提取/" class="post-tag">技术点提取</a><a href="/tags/日常工作/" class="post-tag">日常工作</a>
+                              
+                      </div>
+                      
+
+                          <div class="article-content">
+                            <div class="entry">
+                              
+                                <p>最近在给企业健康管理系统做一个微信扫码登录的功能，借此机会总结下微信登录这个技术点。</p>
+<p>网站应用微信登录是基于 <a target="_blank" rel="noopener" href="https://oauth.net/2/">OAuth2.0</a> 协议标准构建的。OAuth 协议规范了五种授权模式，Authorization Code、PKCE、Client CreDentials、Device Code 和 Refresh Token。微信目前只支持 authorization_code 模式。</p>
+                                  <p class="read-more"> <a href="/2023/04/25/wechat-login/" title="read more">
+                                      阅读更多<a></p>
+                                  
+                            </div>
+                          </div>
+                          <div class="article-footer">
+
+                          </div>
+</article>
+       
+      
+      
+        <article class="card ">
+  
+              
+                <div class="posted-on">『23年03月28日』</div>
+                <h3 class="article-title"><a href="/2023/03/28/acbout-cvte-cir-framework/"><span>
+                      最近工作的一些感想
+                    </span></a></h3>
+                
+                    
+                      <div class="article-top-meta">
+                        
+                          
+                            <a href="/tags/最近还好吗/" class="post-tag">最近还好吗</a>
+                              
+                      </div>
+                      
+
+                          <div class="article-content">
+                            <div class="entry">
+                              
+                                <p>在新东家已经待了三个月有余，老实讲这并不是一个友好的工作环境，你们遇到的坑这里估计都有，我想这也是很多小团队普遍会存在的一些问题，这里不再细讲。</p>
+<p>工作是人生的一段段旅程，加入一家公司，离开，再加入另一家公司，每次选择或许充满着确定的喜悦，或许充满着不确定的忧愁，并不是每个人都能如愿爬到金字塔的顶尖。
+                                  <p class="read-more"> <a href="/2023/03/28/acbout-cvte-cir-framework/" title="read more">
+                                      阅读更多<a></p>
+                                  
+                            </div>
+                          </div>
+                          <div class="article-footer">
+
+                          </div>
+</article>
+       
+      
+      
+        <article class="card ">
+  
+              
+                <div class="posted-on">『23年02月19日』</div>
+                <h3 class="article-title"><a href="/2023/02/19/html-2-pdf-issues/"><span>
+                      团检报告生成方案遇到的一些问题
+                    </span></a></h3>
+                
+                    
+                      <div class="article-top-meta">
+                        
+                          
+                            <a href="/tags/html转pdf/" class="post-tag">html转pdf</a>
+                              
+                      </div>
+                      
+
+                          <div class="article-content">
+                            <div class="entry">
+                              
+                                <p>之前做了一套团检报告生成方案 - <a href="./html-2-pdf.md">上篇博文</a>。期间有遇到一些问题，今天有空归纳总结了一下，整套方案的运行效果还是很理想的，当然我们的业务访问量其实不大，不然有可能会暴露出更多的问题，特别是 puppeteer 是很耗内存资源的，在访问量大的情况下，可能要去重点优化 puppeteer 的使用效率问题,但以现在公司的业务基本不用太担心这个问题。
+                                  <p class="read-more"> <a href="/2023/02/19/html-2-pdf-issues/" title="read more">
+                                      阅读更多<a></p>
+                                  
+                            </div>
+                          </div>
+                          <div class="article-footer">
+
+                          </div>
+</article>
+       
+      
+      
+        <article class="card ">
+  
+              
+                <div class="posted-on">『23年02月12日』</div>
+                <h3 class="article-title"><a href="/2023/02/12/html-2-pdf/"><span>
+                      HTML转pdf的一种实现方案
+                    </span></a></h3>
+                
+                    
+                      <div class="article-top-meta">
+                        
+                          
+                            <a href="/tags/puppeteer/" class="post-tag">puppeteer</a>
+                              
+                      </div>
+                      
+
+                          <div class="article-content">
+                            <div class="entry">
+                              
+                                <p>几经波折，由厦门辗转到了广州。由于换了新工作，繁忙了些，博客也断更了两个月，今天想把最近两个月做的一些工作整理一下。适当是对过去做一些总结，不管是技术也好，生活也好，既是对发生的事的一些思考，也是未来发展的基石。</p>
+<p>刚到新岗位的第一项任务便是实现一个前端 html 转 pdf 的功能，背景是这样的：我司是做健康管理相关的业务的，就有体检报告生成的功能，之前的体检报告一直都是由后端用模版引擎去做渲染，然后再使用 <a target="_blank" rel="noopener" href="https://itextpdf.com/">IText</a>去做 html 转 pdf 的实现，由于体检报告中有大量的 ECharts 图表，还需先将图表转成图片，再将图片转为 pdf，这样一来，一份四十几页的团检报告，总的生成时间需要十几分钟，还不方便调试(需前端调好 html 样式，再给后端生成 pdf，再去看最终生成效果)。</p>
+<p>总结，主要有两个不好的点：</p>
+<ul>
+<li>生成效率差，需要十几分钟</li>
+<li>报告样式不好调</li>
+</ul>
+<p>由于我之前使用过 puppeteer 做过自动化测试，是知道 puppeteer 具有这个功能的，原理也挺简单，莫过于就是自动化的去实现浏览器自带的打印功能。</p>
+                                  <p class="read-more"> <a href="/2023/02/12/html-2-pdf/" title="read more">
+                                      阅读更多<a></p>
+                                  
+                            </div>
+                          </div>
+                          <div class="article-footer">
+
+                          </div>
+</article>
+       
+      
+    
+</div>
+
+<nav class="pagination">
+<a href="/" class="pagination-prev">
+ <strong>前へ</strong>
+</a>
+
+
+
+  <a href="/" class="pagination-item active">
+  1
+  </a>
+
+
+
+
+  <a href="/page/2/" class="pagination-item ">
+  2
+  </a>
+  
+
+
+  <a href="/page/3/" class="pagination-item ">
+  3
+  </a>
+  
+
+<a href="/page/2/" class="pagination-next">
+   <strong>次に</strong>
+</a>
+</nav>
+
+    </main>
+    <div class="footer">
+  <div class="copy">
+    &copy;
+      2023 君の名は。|
+        によって作成されたテーマ<a href="https://github.com/JackZong" target="_blank" title="Theme created by @J.zong">@J.zong</a>
+  </div>
+  <div class="hexo">
+    <span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+  </div>
+  <div class="hexo" title="Powered by Hexo">
+    搭載 <a href="http://hexo.io/" target="_blank">Hexo</a> | <a href="javascript:void(0);" id="bgToggle"> 背景画像 </a>
+  </div>
+</div>
+
+<script>
+  window.onload = function () {
+    const withBg = localStorage.getItem('withBg');
+    if (withBg === 'true') {
+      document.body.classList.add('with-bg');
+      document.getElementById('bgToggle').classList.add('active');
+    }
+
+    document.getElementById('bgToggle').addEventListener('click', function (e) {
+      e.preventDefault();
+      const withBg = localStorage.getItem('withBg');
+      if (withBg === 'true') {
+        localStorage.setItem('withBg', 'false');
+        document.body.classList.remove('with-bg');
+        document.getElementById('bgToggle').classList.remove('active');
+      } else {
+        localStorage.setItem('withBg', 'true');
+        document.body.classList.add('with-bg');
+        document.getElementById('bgToggle').classList.add('active');
+      }
+    })
+  }
+</script>
+
+
+  <script src="/plugins/highlight/highlight.pack.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  
+
+    
+      <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+      
+        </body>
+
+        </html>
+</body>
+</html>
