@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>
+    君の名は
+  </title>
+  <link rel="icon" href="/imgs/favicon.ico">
+  <link rel="stylesheet" href="/css/style.css" type="text/css">
+  <link rel="stylesheet" href="/plugins/highlight/styles/atom-one-dark.css">
+  <!-- Gitalk -->
+  
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+    <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+    <script>
+      window.addEventListener('load', () => {
+        const gitalkContainer = document.getElementById('gitalk-container');
+        if (!gitalkContainer) return;
+        const gitalk = new Gitalk({
+          clientID: 'c9f73c62f3102ab718ca',
+          clientSecret: 'baaae04e80a7772584de07c3c343d48a7d2670da',
+          repo: 'jackzong.github.io',      // The repository of store comments '
+          owner: 'JackZong',
+          admin: ['JackZong'],
+          id: location.pathname,      // Ensure uniqueness and length less than 50
+          distractionFreeMode: false  // Facebook-like distraction free mode
+        })
+        gitalk.render('gitalk-container');
+      })
+    </script>
+    
+<meta name="generator" content="Hexo 6.3.0"></head>
+<body>
+    <nav>
+  <div class="nav-item logo">
+    <a href="/">
+      <button class="btn btn-hover">
+        <span>
+          君の名は
+        </span>
+      </button>
+    </a>
+  </div>
+  
+    <div class="nav-item"><a href="/">
+        主页
+      </a></div>
+    
+    <div class="nav-item"><a href="/archives">
+        时间轴
+      </a></div>
+    
+    <div class="nav-item"><a href="/tags">
+        标签
+      </a></div>
+    
+    <div class="nav-item"><a href="/about">
+        关于
+      </a></div>
+    
+</nav>
+    <main>
+        <div class="post">
+    <article class="card post-article">
+  
+              
+                  <h3 class="article-title-detail"><span>
+                      记录一次 website 性能优化与思考
+                    </span></h3>
+                  <div class="posted-on-detail">『23年07月11日』</div>
+                  
+                    
+                      <div class="article-top-meta">
+                        
+                      </div>
+                      
+
+                          <div class="article-content">
+                            <div class="entry">
+                              
+                                    <p><a target="_blank" rel="noopener" href="https://xxx.com/">GFM</a> 是我司的一个电商站点,主要技术架构是基于 Next.js 做的 SSR App。</p>
+<p>一直以来存在着一些性能问题：</p>
+<ul>
+<li>页面跳转很慢 2-3s</li>
+<li>商品详情页访问很慢 2-3s</li>
+<li>商品分类、集合、seller site 访问很慢 2-3s</li>
+</ul>
+<p>随着对项目的进一步熟悉，也渐渐的发现了导致访问慢的一些原因，然后针对性的做了一些优化。</p>
+<span id="more"></span>
+
+<p>原因：</p>
+<ol>
+<li>站点有通用的头部和底部菜单栏，抽象出了一个<code>Layout</code>组件。每个页面都会复用这个<code>Layout</code>并且通过<code>getServerSideProps</code> function 去请求这些菜单数据，总共四条接口，<code>Node层</code>串行的去请求这三个 Graphql 接口大概需要 <code>2s</code>;</li>
+<li>菜单由第三方系统配置和管理，其提供的接口访问速度慢；</li>
+<li>整个站点几乎不做任何的 <code>cache control</code> 策略；</li>
+</ol>
+<p>怎么处理比较好？</p>
+<ol>
+<li>把所有的串行接口改为并行执行，这个比较简单。效果如下：</li>
+</ol>
+<p>fetch menu 接口串行：<br><img src="/2023/07/11/stale-while-revalidate/fetch_menu1.png" alt="fetch menu"></p>
+<p>fetch menu 接口并行：<br><img src="/2023/07/11/stale-while-revalidate/fetch_menu2.png" alt="fetch menu"></p>
+<p>但是由于第三方实在是慢，就请求几个菜单数据响应时间都要几百毫秒级别。：) 这也可能跟其服务是在美国有关，而我们在天朝，加了墙的天朝。。 总之，串行改并行后大概节省了 <code>1s</code> 的时间。当然，我们经常会在客户端做这样的事情，但是这里，需要跳脱客户端的思维，以服务端的角度去思考这个问题，即一台 Node 服务器需要同时接受成百上千条请求，那么 node 的网络 I&#x2F;O 并发瓶颈是多少？所以串行的实际效果是怎么样的？</p>
+<ol start="2">
+<li>结合实际，头部菜单和底部菜单都是一些不常变的数据，我们可以做一个 API 数据的缓存。</li>
+</ol>
+<p>在 <code>处理 1</code> 的基础上，抽象出一个公共的<code>fetchMenu</code> function，并将结果缓存为 Node 全局变量。</p>
+<pre><code class='javascript'>
+const cacheTime = 60 * 60 * 1000;
+let lastCacheTime: number = 0;
+
+async function fetchMenu(context: NextContext) &#123;
+  const &#123; referer &#125; = context.req.headers;
+  const cacheTimeout = Date.now() - lastCacheTime > cacheTime;
+  if (cache && referer && !cacheTimeout) &#123;
+    return cache;
+  &#125;
+
+  // merge fetch menu requests
+
+  // const response = await Promise.all([q1, q2, q3]);
+
+  // xxx
+
+  cache = &#123;
+    bannerData,
+    menuData,
+    secondaryMenuData,
+  &#125;;
+  lastCacheTime = Date.now();
+  return cache;
+&#125;
+</code></pre>
+
+<p>使用了缓存策略：如果有人刷新了页面，即 HTTP header 的 referer 为空，这时就去重新请求菜单数据，并替换缓存。否则，直接使用缓存数据。并设置了一个一个小时的最大缓存时间。<br>再来看一下效果：<br><img src="/2023/07/11/stale-while-revalidate/fetch_menu3.png" alt="fetch menu3"><br>可以看到，如果缓存命中的话，那响应就非常快了。</p>
+<ol start="3">
+<li>Stable-While-Revalidation</li>
+</ol>
+<p>Stable-While-Revalidate 是一个很好的缓存策略，浏览器也原生支持。SWR 就是基于这个思想去做的 API 请求的缓存策略。</p>
+<pre><code class='javascript'>
+context.res.setHeader("Cache-Control", "public, max-age=10, stale-while-revalidate=300");
+</code></pre>
+
+<p>我们会给几乎所有的页面加上这条缓存策略。<code>public</code>代表这条策略适用于所有客户端（浏览器，代理等）,<code>max-age=10</code>代表当前请求缓存 <code>10s</code>,<code>stale-while-revalidate=300</code>代表在第<code>10s-300s</code>内重复请求会先返回缓存，并在<code>background</code>发起一条 revalidate 的请求，然后将请求结果替换为当前缓存，供下次返回给客户端，然后缓存时间会重新计算。</p>
+<p>当我们使用了这样的缓存策略，基本能做到相同页面在第二次访问能够秒开了。</p>
+
+                                      
+                            </div>
+                          </div>
+                          <div class="article-footer">
+
+                          </div>
+</article>
+        
+            <div id="gitalk-container" class="card"></div>
+            
+</div>
+    </main>
+    <div class="footer">
+  <div class="copy">
+    &copy;
+      2023 君の名は。|
+        によって作成されたテーマ<a href="https://github.com/JackZong" target="_blank" title="Theme created by @J.zong">@J.zong</a>
+  </div>
+  <div class="hexo">
+    <span id="busuanzi_container_site_pv">本站总访问量<span id="busuanzi_value_site_pv"></span>次</span>
+  </div>
+  <div class="hexo" title="Powered by Hexo">
+    搭載 <a href="http://hexo.io/" target="_blank">Hexo</a> | <a href="javascript:void(0);" id="bgToggle"> 背景画像 </a>
+  </div>
+</div>
+
+<script>
+  window.onload = function () {
+    const withBg = localStorage.getItem('withBg');
+    if (withBg === 'true') {
+      document.body.classList.add('with-bg');
+      document.getElementById('bgToggle').classList.add('active');
+    }
+
+    document.getElementById('bgToggle').addEventListener('click', function (e) {
+      e.preventDefault();
+      const withBg = localStorage.getItem('withBg');
+      if (withBg === 'true') {
+        localStorage.setItem('withBg', 'false');
+        document.body.classList.remove('with-bg');
+        document.getElementById('bgToggle').classList.remove('active');
+      } else {
+        localStorage.setItem('withBg', 'true');
+        document.body.classList.add('with-bg');
+        document.getElementById('bgToggle').classList.add('active');
+      }
+    })
+  }
+</script>
+
+
+  <script src="/plugins/highlight/highlight.pack.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script>
+  
+
+    
+      <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+      
+        </body>
+
+        </html>
+</body>
+</html>

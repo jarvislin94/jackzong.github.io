@@ -67,6 +67,46 @@
         <article class="card ">
   
               
+                <div class="posted-on">『23年07月11日』</div>
+                <h3 class="article-title"><a href="/2023/07/11/stale-while-revalidate/"><span>
+                      记录一次 website 性能优化与思考
+                    </span></a></h3>
+                
+                    
+                      <div class="article-top-meta">
+                        
+                          
+                            <a href="/tags/技术点提取/" class="post-tag">技术点提取</a>
+                              
+                      </div>
+                      
+
+                          <div class="article-content">
+                            <div class="entry">
+                              
+                                <p><a target="_blank" rel="noopener" href="https://xxx.com/">GFM</a> 是我司的一个电商站点,主要技术架构是基于 Next.js 做的 SSR App。</p>
+<p>一直以来存在着一些性能问题：</p>
+<ul>
+<li>页面跳转很慢 2-3s</li>
+<li>商品详情页访问很慢 2-3s</li>
+<li>商品分类、集合、seller site 访问很慢 2-3s</li>
+</ul>
+<p>随着对项目的进一步熟悉，也渐渐的发现了导致访问慢的一些原因，然后针对性的做了一些优化。</p>
+                                  <p class="read-more"> <a href="/2023/07/11/stale-while-revalidate/" title="read more">
+                                      阅读更多<a></p>
+                                  
+                            </div>
+                          </div>
+                          <div class="article-footer">
+
+                          </div>
+</article>
+       
+      
+      
+        <article class="card ">
+  
+              
                 <div class="posted-on">『23年05月21日』</div>
                 <h3 class="article-title"><a href="/2023/05/21/oauth-secure-issue-prevention/"><span>
                       使用OAuth实现统一登录的安全防范
@@ -198,46 +238,6 @@
                               
                                 <p>之前做了一套团检报告生成方案 - <a href="./html-2-pdf.md">上篇博文</a>。期间有遇到一些问题，今天有空归纳总结了一下，整套方案的运行效果还是很理想的，当然我们的业务访问量其实不大，不然有可能会暴露出更多的问题，特别是 puppeteer 是很耗内存资源的，在访问量大的情况下，可能要去重点优化 puppeteer 的使用效率问题,但以现在公司的业务基本不用太担心这个问题。
                                   <p class="read-more"> <a href="/2023/02/19/html-2-pdf-issues/" title="read more">
-                                      阅读更多<a></p>
-                                  
-                            </div>
-                          </div>
-                          <div class="article-footer">
-
-                          </div>
-</article>
-       
-      
-      
-        <article class="card ">
-  
-              
-                <div class="posted-on">『23年02月12日』</div>
-                <h3 class="article-title"><a href="/2023/02/12/html-2-pdf/"><span>
-                      HTML转pdf的一种实现方案
-                    </span></a></h3>
-                
-                    
-                      <div class="article-top-meta">
-                        
-                          
-                            <a href="/tags/puppeteer/" class="post-tag">puppeteer</a>
-                              
-                      </div>
-                      
-
-                          <div class="article-content">
-                            <div class="entry">
-                              
-                                <p>几经波折，由厦门辗转到了广州。由于换了新工作，繁忙了些，博客也断更了两个月，今天想把最近两个月做的一些工作整理一下。适当是对过去做一些总结，不管是技术也好，生活也好，既是对发生的事的一些思考，也是未来发展的基石。</p>
-<p>刚到新岗位的第一项任务便是实现一个前端 html 转 pdf 的功能，背景是这样的：我司是做健康管理相关的业务的，就有体检报告生成的功能，之前的体检报告一直都是由后端用模版引擎去做渲染，然后再使用 <a target="_blank" rel="noopener" href="https://itextpdf.com/">IText</a>去做 html 转 pdf 的实现，由于体检报告中有大量的 ECharts 图表，还需先将图表转成图片，再将图片转为 pdf，这样一来，一份四十几页的团检报告，总的生成时间需要十几分钟，还不方便调试(需前端调好 html 样式，再给后端生成 pdf，再去看最终生成效果)。</p>
-<p>总结，主要有两个不好的点：</p>
-<ul>
-<li>生成效率差，需要十几分钟</li>
-<li>报告样式不好调</li>
-</ul>
-<p>由于我之前使用过 puppeteer 做过自动化测试，是知道 puppeteer 具有这个功能的，原理也挺简单，莫过于就是自动化的去实现浏览器自带的打印功能。</p>
-                                  <p class="read-more"> <a href="/2023/02/12/html-2-pdf/" title="read more">
                                       阅读更多<a></p>
                                   
                             </div>
