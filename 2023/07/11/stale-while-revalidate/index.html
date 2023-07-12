@@ -91,7 +91,7 @@
 
 <p>原因：</p>
 <ol>
-<li>站点有通用的头部和底部菜单栏，抽象出了一个<code>Layout</code>组件。每个页面都会复用这个<code>Layout</code>并且通过<code>getServerSideProps</code> function 去请求这些菜单数据，总共四条接口，<code>Node层</code>串行的去请求这三个 Graphql 接口大概需要 <code>2s</code>;</li>
+<li>站点有通用的头部和底部菜单栏，抽象出了一个<code>Layout</code>组件。每个页面都会复用这个<code>Layout</code>，但是 Layout 所需的菜单数据都是在每个页面各自的<code>getServerSideProps</code> function 里去请求，总共四条接口，即每个页面都要重复的去请求这些接口，而<code>Node层</code>串行的去请求这三个 Graphql 接口大概需要 <code>1.5s</code>;</li>
 <li>菜单由第三方系统配置和管理，其提供的接口访问速度慢；</li>
 <li>整个站点几乎不做任何的 <code>cache control</code> 策略；</li>
 </ol>
