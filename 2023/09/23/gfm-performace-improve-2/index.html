@@ -68,7 +68,7 @@
                   <h3 class="article-title-detail"><span>
                       电商网站性能优化 - Part Ⅱ
                     </span></h3>
-                  <div class="posted-on-detail">『23年09月13日』</div>
+                  <div class="posted-on-detail">『23年09月23日』</div>
                   
                     
                       <div class="article-top-meta">
@@ -81,7 +81,7 @@
                               
                                     <p>之前主要在缓存方面对 Website 进行了优化,<a href="%22./stale-while-revalidate.md%22">优化 1</a>。主要解决了第二次及以上访问 app 的速度问题，但是对于用户第一次访问还是会慢一些，整个站点的 Web Vitals 也不是很好。</p>
 <p>这是优化前的得分：</p>
-<p><img src="/2023/09/13/gfm-performace-improve-2/performance-before.png" alt="Web Vitals Before"></p>
+<p><img src="/2023/09/23/gfm-performace-improve-2/performance-before.png" alt="Web Vitals Before"></p>
 <p>所以，决定通过一些分析工具对整个站点做一个全面的性能分析，再对症下药。</p>
 <h2 id="那么，有哪些好用的性能分析工具？"><a href="#那么，有哪些好用的性能分析工具？" class="headerlink" title="那么，有哪些好用的性能分析工具？"></a>那么，有哪些好用的性能分析工具？</h2><ol>
 <li><a target="_blank" rel="noopener" href="https://pagespeed.web.dev/">PageSpeed Insights</a><br>这是 Google 的在线性能分析工具，可以提供你站点近 28 天的性能数据，包括 core web vitals（FCP,CLS,LCP 等）。</li>
@@ -91,7 +91,7 @@
 <span id="more"></span>
 
 <p>比如，guideline 中给出了 LCP 应该在站点开始加载后 <em>2.5s</em> 内完成,才对用户比较友好。</p>
-<p><img src="/2023/09/13/gfm-performace-improve-2/core-web-vitals.png" alt="Alt text"></p>
+<p><img src="/2023/09/23/gfm-performace-improve-2/core-web-vitals.png" alt="Alt text"></p>
 <p>另外，我们还用到了一个工具 <a target="_blank" rel="noopener" href="https://www.npmjs.com/package/webpack-bundle-analyzer">webpack-bundle-analyzer</a>,用来分析 bundle 的大小以及组成。</p>
 <p>在<code>next.config.js</code>中,修改 webpack 的配置，添加这个插件，插件会在执行<code>yarn analyze</code>时执行。</p>
 <pre><code class='javascript'>if (process.env.ANALYZE === "true") &#123;
@@ -108,31 +108,31 @@
   &#125;
 &#125;</code></pre>
 
-<h2 id="开始行动"><a href="#开始行动" class="headerlink" title="开始行动"></a>开始行动</h2><p>打开 PageSpeed Inside 跑一遍站点，等到一个优化前的性能报告。如下：<br><img src="/2023/09/13/gfm-performace-improve-2/performance-before.png" alt="Alt text"></p>
+<h2 id="开始行动"><a href="#开始行动" class="headerlink" title="开始行动"></a>开始行动</h2><p>打开 PageSpeed Inside 跑一遍站点，等到一个优化前的性能报告。如下：<br><img src="/2023/09/23/gfm-performace-improve-2/performance-before.png" alt="Alt text"></p>
 <p>总得分只有 7，其它指标也基本是飘红的。</p>
 <p>其中<code>CLS</code>分数过大主要是因为页面有元素发生了偏移，主要是两个注册按钮需要再判断用户有没登陆后才显示，然后又没有为其预留空间，就会导致按钮出现的时候整个页面会整体往下移一下，页面发生了位移，这个比较好解决，只要给两个注册按钮预留空间就可以了。</p>
 <p>再看下效果：</p>
-<p><img src="/2023/09/13/gfm-performace-improve-2/CLS-After.png" alt="CLS"></p>
+<p><img src="/2023/09/23/gfm-performace-improve-2/CLS-After.png" alt="CLS"></p>
 <p>其次，FCP 与 LCP 的分数分别达到了<code>3.0s</code> 与<code>6.0s</code>，与 Good level 的<code>1.8s</code>和<code>2.5s</code>还是有一定的差距。</p>
-<p><img src="/'./.FCP-Standard.svg" alt="FCP-Standard"></p>
+<p><img src="/'FCP-Standard.svg" alt="FCP-Standard"></p>
 <p>可以仔细揣摩下这两个指标的具体含义和计算方式，<a href="'https://web.dev/fcp/'">FCP(First-Contentful-Paint)</a>，简单的来讲就是用户从打开你的站点到看到网站的内容，总共等待了多长时间，如果是 1.8s 内则认为是一个好的体验，不一定要看到全部内容，部分文本，图像，甚至背景图即可。</p>
-<p><img src="/2023/09/13/gfm-performace-improve-2/FCP-Caulate.png" alt="FCP 计算规则"></p>
+<p><img src="/2023/09/23/gfm-performace-improve-2/FCP-Caulate.png" alt="FCP 计算规则"></p>
 <p><em>大家看到可以作弊的地方了嘛 👀，是不是可以搞个小小的隐晦点的 svg？站点加载完再删掉？当然这样没有意义。</em></p>
 <p><a href="'https://fweb.dev/lcp/'">LCP Largest-Contentful-Paint</a>,简单来讲就是页面中<code>最大的那个元素</code>的渲染时间，可以是 text block 或 image block。</p>
-<p><img src="/2023/09/13/gfm-performace-improve-2/LCP-Caulate.png" alt="CLP 计算规则"></p>
+<p><img src="/2023/09/23/gfm-performace-improve-2/LCP-Caulate.png" alt="CLP 计算规则"></p>
 <p><strong>Example</strong><br><img src="https://web-dev.imgix.net/image/admin/bsBm8poY1uQbq7mNvVJm.png?auto=format&w=1600" alt="LCP"></p>
 <p>对于我们站点来说，LCP 就是首页的 banner 图的渲染时间。</p>
-<h2 id="性能报告也有指出哪些地方是可以做优化的"><a href="#性能报告也有指出哪些地方是可以做优化的" class="headerlink" title="性能报告也有指出哪些地方是可以做优化的"></a>性能报告也有指出哪些地方是可以做优化的</h2><p>在<code>Opportunity</code>模块<br><img src="/2023/09/13/gfm-performace-improve-2/Opportunity.png" alt="Opportunity"></p>
+<h2 id="性能报告也有指出哪些地方是可以做优化的"><a href="#性能报告也有指出哪些地方是可以做优化的" class="headerlink" title="性能报告也有指出哪些地方是可以做优化的"></a>性能报告也有指出哪些地方是可以做优化的</h2><p>在<code>Opportunity</code>模块<br><img src="/2023/09/23/gfm-performace-improve-2/Opportunity.png" alt="Opportunity"></p>
 <ul>
 <li>“Reduce initial server response time” 影响到 FCP、LCP 指标</li>
 <li>“Reduce unused JavaScript”会影响 LCP 指标</li>
 </ul>
 <p>我们的应用是直接 hot start 跑在 AWS 的 EC2 上,没有使用到 CDN，另外首页的内容用 <code>Builder.io</code>进行管理,需要去 builder.io 拉取资讯来做 SSR。整体下来效果不是很好。<br>还是需要 CDN 加持。</p>
 <p><strong>做了个测试：</strong></p>
-<p>使用 CDN 之前：<br><img src="/2023/09/13/gfm-performace-improve-2/no-cdn.png"></p>
-<p>使用 CDN 之后：<br><img src="/2023/09/13/gfm-performace-improve-2/with-cdn.png"></p>
+<p>使用 CDN 之前：<br><img src="/2023/09/23/gfm-performace-improve-2/no-cdn.png"></p>
+<p>使用 CDN 之后：<br><img src="/2023/09/23/gfm-performace-improve-2/with-cdn.png"></p>
 <p>可以看到，使用 CDN 资源的响应时间快了五倍多。所以，后续是有计划给站点的静态资源加上 CDN。</p>
-<p>对于 Reduce unused JavaScript，简单的理解就是减少页面所有 JS 资源的 bundle 体积。这样可以较少传输、解析与执行的时间。Next.js 的每个页面都会依赖一些公共的 thunk。<br>比如：<br><img src="/2023/09/13/gfm-performace-improve-2/before-tree-sharking.png" alt="Tree-Shaking-Before"></p>
+<p>对于 Reduce unused JavaScript，简单的理解就是减少页面所有 JS 资源的 bundle 体积。这样可以较少传输、解析与执行的时间。Next.js 的每个页面都会依赖一些公共的 thunk。<br>比如：<br><img src="/2023/09/23/gfm-performace-improve-2/before-tree-sharking.png" alt="Tree-Shaking-Before"></p>
 <p>这是 Next.js 打包后的产物，其中<code>First Load JS shared by All</code>指每个页面都需要依赖这些资源，都要去加载这些资源。而我们这些资源大小足足有<code>600+kB</code>，<br>特别是 app.js。</p>
 <p>这时就需要用到前面提到的 webpack-bundle-analyzer 去查看每个 bundle 的组成。后面发现，app.js 里包含了很多<code>并不通用的资源</code>，这些都是因为没有 Tree-Sharking 而被包含了进来，应该是因为我们使用的是 Next.js 12 版本，可能是使用的 webpack 4? 所以没有默认开启 Tree-Sharking。</p>
 <p><strong>所以，通过开启 Tree-Sharking 解决，</strong>在 package.json 里指定 Side effect</p>
@@ -146,9 +146,9 @@
 <p><strong>另外，对几个依赖包进行了优化，</strong>比如使用<code>lodash-esm</code> 替换<code>lodash</code>，减少 buidler.io SDK 体积等。</p>
 <p><strong>另外，我觉得还有一个很关键的点，就是使用<code>Lazy load</code>。</strong> 比如，登录弹窗等，就可以等用户点击了再去加载，在 Next.js 中可以方便的使用 Dynamic API 轻松实现<code>Lazy load</code>。</p>
 <p>最后<code>First Load JS shared by All</code>的体积减少了一半，只有 300+KB，这样每个页面需要加载的所有资源也会减少了，但依然还是飘红，有待进一步优化。</p>
-<p><img src="/2023/09/13/gfm-performace-improve-2/after-tree-sharking.png" alt="alt"></p>
+<p><img src="/2023/09/23/gfm-performace-improve-2/after-tree-sharking.png" alt="alt"></p>
 <p>最后得到的分数：</p>
-<p><img src="/2023/09/13/gfm-performace-improve-2/after-improve.png" alt="alt"></p>
+<p><img src="/2023/09/23/gfm-performace-improve-2/after-improve.png" alt="alt"></p>
 <p>FCP LCP 指标都得到了提升，然而还不是特别理想，还是有更多的机会去提高它。</p>
 <p>后续的计划：</p>
 <ul>
